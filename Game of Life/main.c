@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "file_utilities.h"
 
 char* allocateMemory(int r, int c);
 void printBoard(char *board, int rows, int columns);
 int promptUser();
 int promptForRows();
 int promptForCols();
-int read_file( char* filename, char **buffer );
-void createBoardFromFile( char* board, char **temp_board, size_t buffer_len );
+void promptForFile(char **file);
 
 
 
@@ -15,7 +15,8 @@ void createBoardFromFile( char* board, char **temp_board, size_t buffer_len );
 int main(int argc, char const *argv[])
 {
 	int r, c, response;
-    char* file;
+    char *file;
+    char *temp_file[100];
     char *buffer;
      /* Boards for the game */
     char *og_board, *temp_board, final_board;
@@ -29,6 +30,8 @@ int main(int argc, char const *argv[])
 	if (argc == 3)
     {
         r = atoi(argv[1]), c = atoi(argv[2]);
+        og_board = allocateMemory(r, c);
+        printBoard(og_board, r, c);
     }
 	else
     {
@@ -48,94 +51,25 @@ int main(int argc, char const *argv[])
                 break;
             case 3:
                 file = "./save_data.txt";
+                
                 /* Read the file  */
                 buffer_length = read_file(file, &buffer);
+
+                // need to get the size of the board
                 og_board = buffer;
                 createBoardFromFile(og_board, &temp_board, buffer_length);
-
+                r = getNumRows(og_board, buffer_length);
+                c = getNumCols(og_board, buffer_length);
+                printBoard(temp_board, r, c);
                 break;
             case 4:
                 printf("This will do something.");
                 break;
             case 5:
-                return 0;
+                exit(EXIT_SUCCESS);
         }
     }
 	return 0;
-}
-
-
-/**
- * Reads in save data into the heap and uses it to
- *  create the board for the Game of Life.
- *
- * @param r - int - number of rows
- * @param c - int - number of columns
- * @return - char* - allocated memory in the heap
- */
-int read_file( char* filename, char **buffer )
-{
-    /* Pointer to file */
-    FILE *fp;
-    size_t new_length;
-    
-    /* File contents */
-    fp = fopen(filename, "rb");
-    if (fp != NULL) {
-
-        /* Go to the end of the file */
-        if (fseek(fp, 0L, SEEK_END) == 0) {
-
-            /* Get the size of the file */
-            long buffer_size = ftell(fp);
-            
-            if (buffer_size == -1) 
-                return -1;
-
-            /* Make buffer that size */
-            *buffer = malloc(sizeof(char) * (buffer_size));
-
-            /* Go back to the start of the file */
-            if (fseek(fp, 0L, SEEK_SET) != 0)
-                return -1;
-
-            /* Read file into the memory */
-            new_length = fread(*buffer, sizeof(char), buffer_size, fp);
-
-            if (ferror(fp) != 0)
-                fputs("Error reading file ", stderr);
-            // else
-            //  *buffer[new_length++] = '\0';
-        }
-        fclose(fp);
-    }
-
-    return new_length;
-}
-
-/**
- * This prints out the board that was read into the game via the
- * read_file function.
- *
- * @param - board - int - original board
- * @param - **temp_board - int - board to write to
- * @return - buffer_len - allocated memory in the heap
- */
-void createBoardFromFile( char* board, char **temp_board, size_t buffer_len )
-{
-    int rows = 0, cols = 0;
-    
-    for (int i = 0; i < buffer_len; ++i) 
-    {
-        if (board[i] == ';') {
-            rows++;
-        }
-    }
-
-    cols = (buffer_len - rows ) / rows;
-
-    *temp_board = allocateMemory(rows, cols);
-    printBoard(*temp_board, rows, cols);
 }
 
 /**
@@ -176,7 +110,6 @@ void printBoard(char *board, int rows, int columns)
 			printf("\x1B[34m\u25A0 ");
 		printf("\n");
 	}
-
 }
 
 /**
@@ -197,7 +130,7 @@ int promptUser()
 	printf("(1) Play with generic input (10 x 10)\n");
 	printf("(2) Play with specified input (Rows x Columns)\n");
 	printf("(3) Load a previously saved board\n");
-	printf("(4)\n");
+	printf("(4) How many interations would you like to view?\n");
 	printf("(5)Exit\n");
 	scanf("%d", &response);
     return response;
