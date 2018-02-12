@@ -2,74 +2,220 @@
 #include <stdlib.h>
 #include "file_utilities.h"
 
-char* allocateMemory(int r, int c);
-void printBoard(char *board, int rows, int columns);
+void createBoard(int r, int c);
+void printBoard(int rows, int columns);
 int promptUser();
-int promptForRows();
-int promptForCols();
-void promptForFile(char **file);
+int update(int n);
+void freeBoard();
+int saveBoard();
+void loadBoard();
 
+int r, c, response, generations = 0;
+char userIn[10];
+char file[30];
+char *buffer;
 
+/* Board for the game */
+char **og_board, **temp_board;
 
+/* Size of buffer */
+int buffer_length;
+int rows = 0;
+int cols = 0;
 
 int main(int argc, char const *argv[])
 {
-	int r, c, response;
-    char *file;
-    char *temp_file[100];
-    char *buffer;
-     /* Boards for the game */
-    char *og_board, *temp_board, final_board;
-    /* Size of buffer. Always larger than needed by +2 */
-    size_t buffer_length;
-
-    /* Read the file  */
-    buffer_length = read_file(file, &buffer);
-    og_board = buffer;
-
-	if (argc == 3)
-    {
-        r = atoi(argv[1]), c = atoi(argv[2]);
-        og_board = allocateMemory(r, c);
-        printBoard(og_board, r, c);
-    }
-	else
-    {
-        response = promptUser();
-
-        switch (response) {
-
+    while (1) {
+        switch(promptUser()) {
             case 1:
-                og_board = allocateMemory(10, 10);
-                printBoard(og_board, 10, 10);
+                update(1);
                 break;
             case 2:
-                r = promptForRows();
-                c = promptForCols();
-                og_board = allocateMemory(r, c);
-                printBoard(og_board, r, c);
+                while (generations < 10) {
+                    update(1);
+                    generations++;
+                }
                 break;
             case 3:
-                file = "./save_data.txt";
-                
-                /* Read the file  */
-                buffer_length = read_file(file, &buffer);
-
-                // need to get the size of the board
-                og_board = buffer;
-                createBoardFromFile(og_board, &temp_board, buffer_length);
-                r = getNumRows(og_board, buffer_length);
-                c = getNumCols(og_board, buffer_length);
-                printBoard(temp_board, r, c);
+                printf("Name of file to load: \n");
+                fgets(file, 31, stdin);
+                loadBoard();
                 break;
-            case 4:
-                printf("This will do something.");
+            case 5: // save board to a file
+                printf("Name of file to save: \n");
+                fgets(file, 31, stdin);
+                saveBoard();
                 break;
-            case 5:
+            case 6:
                 exit(EXIT_SUCCESS);
+
         }
     }
-	return 0;
+    return 0;
+}
+
+int update(int n) {
+    int g = 0;
+    int i = 0;
+    int j = 0;
+    if (og_board == NULL) {
+        printf("There's no world to generate.\n");
+        printf("\n");
+        return 1;
+    }
+    /* For number of generations. */
+    for (g; g < n; g++) {
+        /* Clear temp_board */
+        for (i = 0; i < rows; i++) {
+            for (j = 0; j < cols; j++) {
+                temp_board[i][j] = '0';
+            }
+        }
+
+        int r, c;
+        int rcap, ccap;
+        int neighbors;
+        /* For each cell, count the number of live cells around it. */
+        for (i = 0; i < rows; i++) {
+            for (j = 0; j < cols; j++) {
+                neighbors = 0;
+
+                /* Create 3x3 grid bounds. */
+                r = i - 1; // top bound
+                rcap = i + 1; // bottom bound
+                c = j - 1; // left bound
+                ccap = j + 1; // right bound
+
+                /* Determine if a row or column must be cut
+                 * based on the position of the element in question. */
+                if (i == 0) {
+                    r++;
+                } else if (i == (rows - 1)) { // account for +1 error
+                    rcap--;
+                }
+                if (j == 0) {
+                    c++;
+                } else if (j == (cols - 1)) {
+                    ccap--;
+                }
+
+                for (r; r <= rcap; r++) {
+                    /* c's orientation must be recalculated relative to
+                     * the game board after incrementation. */
+                    for (c = getCBounds(j,c); c <= ccap; c++) {
+                        /* Don't count yourself as your neighbor. */
+                        if (og_board[r][c] == '1' &&
+                                !((r == i) && (c == j))) {
+                            neighbors++;
+                        }
+                    }
+                }
+                /* Determine fate */
+                if (og_board[i][j] == '0') {
+                    if (neighbors == 3) {
+                        temp_board[i][j] = '1';
+                    }
+                } else if (og_board[i][j] == '1'){
+                    if (neighbors < 2 || neighbors > 3) {
+                        temp_board[i][j] = '0';
+                    } else {
+                        temp_board[i][j] = '1';
+                    }
+                }
+            }
+        }
+        /* Copy temp to board */
+        for (i = 0; i < rows; i++) {
+            for (j = 0; j < cols; j++) {
+                og_board[i][j] = temp_board[i][j];
+            }
+        }
+        printBoard(rows, cols);
+        printf("\n");
+    }
+    return 0;
+}
+
+/*
+ * Recalculates the column to begin searching for neighbors in.
+ */
+int getCBounds(int j, int c) {
+    c = j - 1; // left bound
+    if (j == 0) {
+        c++;
+    }
+    return c;
+}
+
+int saveBoard()
+{
+    int i, j, size;
+    char *str;
+    str = (char *)malloc((rows*(cols+1)) * sizeof(char));
+
+    if (og_board == NULL) {
+        printf("There is no board to save.\n");
+        return 1;
+    }
+
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++) {
+            str[size] = og_board[i][j];
+            size++;
+        }
+        str[size] = ';';
+        size++;
+    }
+    write_file(file, str, size);
+    printf("Game saved.\n");
+    return 0;
+}
+
+void loadBoard()
+{
+    char *str;
+    int size;
+
+    if ((size = read_file(file, &str)) > 1) {
+        rows = 0;
+        cols = 0;
+        int i, j;
+
+        // Get row size
+        while (str[cols] != ';') {
+            cols++;
+        }
+        for (int i = 0; i < size; i++)
+        {
+            if (str[i] == ';')
+            {
+                rows++;
+            }
+        }
+
+        freeBoard();
+        createBoard(rows, cols);
+
+        /* Now we fill the board. We know the rows and columns
+         * fit inside the board. Each item that is not a semi-colon
+         * gets added to the board.
+         * We must free the temp board memory after.
+         */
+        int n = 0;
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols + 1; j++)
+            {
+                if (str[n] != ';')
+                {
+                    og_board[i][j] = str[n];
+                }
+                n++;
+            }
+        }
+        printBoard(rows, cols);
+    }
+    free(str);
 }
 
 /**
@@ -80,19 +226,27 @@ int main(int argc, char const *argv[])
  * @param c - int - number of columns
  * @return - char* - allocated memory in the heap
  */
-char* allocateMemory(int r, int c)
+void createBoard(const int r, const int c)
 {
-    // Allocate memory here
-    char *arr[r], i, j, count;
+    rows = r;
+    cols = c;
+    int i, j;
+    og_board = (char **)malloc(rows * sizeof(char*));
+    for (int i = 0; i < rows; i++)
+        og_board[i] = (char*)malloc(cols * sizeof(char));
 
-    for (i = 0; i < r; i++)
-        arr[i] = (char *)malloc(c * sizeof(char));
+    for (i = 0; i < rows; i++){
+        for (j = 0; j < cols; j++)
+            og_board[i][j] = 0;
+    }
+    temp_board = (char **)malloc(rows * sizeof(char*));
+    for (int i = 0; i < rows; i++)
+        temp_board[i] = (char*)malloc(cols * sizeof(char));
 
-    count = 0;
-    for (i = 0; i < r; i++)
-        for (j = 0; j < c; j++)
-            arr[i][j] = ++count;
-    return *arr;
+    for (i = 0; i < rows; i++){
+        for (j = 0; j < cols; j++)
+            temp_board[i][j] = 0;
+    }
 }
 
 /**
@@ -102,14 +256,20 @@ char* allocateMemory(int r, int c)
  * @param rows - int - how many rows the board has
  * @param columns - int - how many columns the board has
  */
-void printBoard(char *board, int rows, int columns)
+void printBoard( int r, int c )
 {
-	int count = 0;
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++)
-			printf("\x1B[34m\u25A0 ");
-		printf("\n");
-	}
+    rows = r;
+    cols = c;
+    int i, j;
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++){
+            if (og_board[i][j] == '1')
+                printf("\x1b[37m\u2588");
+            else
+                printf("\x1B[34m\u2588");
+        }
+        printf("\n");
+    }
 }
 
 /**
@@ -121,41 +281,27 @@ void printBoard(char *board, int rows, int columns)
  */
 int promptUser()
 {
-	//char valid_inputs[6] = {1,2,3,4,5};
-    int response;
-	printf("Welcome to the Infamous Game of Life!\n");
-	printf("\n");
-	printf("\n");
+    int response = 0;
+    char c[3];
+
 	printf("What would you wish to do today?\n");
-	printf("(1) Play with generic input (10 x 10)\n");
-	printf("(2) Play with specified input (Rows x Columns)\n");
-	printf("(3) Load a previously saved board\n");
-	printf("(4) How many interations would you like to view?\n");
-	printf("(5)Exit\n");
-	scanf("%d", &response);
+	printf("(1) Live one generation\n");
+	printf("(2) Live through 10 generations\n");
+	printf("(3) Load a previously saved board by filename\n");
+	printf("(4) Save current file state by filename \n");
+	printf("(5) Exit\n");
+	fflush(stdin);
+    fgets(c, 3, stdin);
+    response = atoi(c);
     return response;
 }
 
-/**
- * Ask the user how many rows they want the board to be.
- * @return
- */
-int promptForRows()
-{
-    int rows;
-    printf("How many rows would you like? \n");
-    scanf("%d", &rows);
-    return  rows;
-}
-
-/**
- * Ask the user how many columns they want the board to be.
- * @return
- */
-int promptForCols()
-{
-    int cols;
-    printf("How many columns would you like? \n");
-    scanf("%d", &cols);
-    return  cols;
+void freeBoard() {
+    int i;
+    if (og_board != NULL) {
+        for (i = 0; i < rows; i++) {
+            free(og_board[i]);
+        }
+        free(og_board);
+    }
 }
