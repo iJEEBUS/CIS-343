@@ -54,10 +54,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/Users/user/Desktop/School/Winter-2018/CIS-343/HW/Game of Life"
+CMAKE_SOURCE_DIR = "/Users/user/Desktop/School/Winter-2018/CIS-343/Github/CIS-343/Game of Life"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/user/Desktop/School/Winter-2018/CIS-343/HW/Game of Life/cmake-build-debug"
+CMAKE_BINARY_DIR = "/Users/user/Desktop/School/Winter-2018/CIS-343/Github/CIS-343/Game of Life/cmake-build-debug"
 
 #=============================================================================
 # Target rules for target CMakeFiles/Game_of_Life.dir
@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = "/Users/user/Desktop/School/Winter-2018/CIS-343/HW/Game of Li
 CMakeFiles/Game_of_Life.dir/all:
 	$(MAKE) -f CMakeFiles/Game_of_Life.dir/build.make CMakeFiles/Game_of_Life.dir/depend
 	$(MAKE) -f CMakeFiles/Game_of_Life.dir/build.make CMakeFiles/Game_of_Life.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/Users/user/Desktop/School/Winter-2018/CIS-343/HW/Game of Life/cmake-build-debug/CMakeFiles" --progress-num=1,2 "Built target Game_of_Life"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/Users/user/Desktop/School/Winter-2018/CIS-343/Github/CIS-343/Game of Life/cmake-build-debug/CMakeFiles" --progress-num=1,2 "Built target Game_of_Life"
 .PHONY : CMakeFiles/Game_of_Life.dir/all
 
 # Include target in all.
@@ -76,9 +76,9 @@ all: CMakeFiles/Game_of_Life.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Game_of_Life.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/user/Desktop/School/Winter-2018/CIS-343/HW/Game of Life/cmake-build-debug/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/user/Desktop/School/Winter-2018/CIS-343/Github/CIS-343/Game of Life/cmake-build-debug/CMakeFiles" 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/Game_of_Life.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/user/Desktop/School/Winter-2018/CIS-343/HW/Game of Life/cmake-build-debug/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/user/Desktop/School/Winter-2018/CIS-343/Github/CIS-343/Game of Life/cmake-build-debug/CMakeFiles" 0
 .PHONY : CMakeFiles/Game_of_Life.dir/rule
 
 # Convenience name for target.

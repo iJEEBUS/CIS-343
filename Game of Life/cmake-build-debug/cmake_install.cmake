@@ -1,4 +1,4 @@
-# Install script for directory: /Users/user/Desktop/School/Winter-2018/CIS-343/HW/Game of Life
+# Install script for directory: /Users/user/Desktop/School/Winter-2018/CIS-343/Github/CIS-343/Game of Life
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,5 +35,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/user/Desktop/School/Winter-2018/CIS-343/HW/Game of Life/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/user/Desktop/School/Winter-2018/CIS-343/Github/CIS-343/Game of Life/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
