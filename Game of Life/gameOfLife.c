@@ -1,16 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "file_utilities.h"
-
-void createBoard(int r, int c);
-void printBoard(int rows, int columns);
-void freeBoard();
-void loadBoard(char *file);
-int promptUser();
-int update(int n);
-int saveBoard(char *file);
-void welcome();
-int getCBounds(int j, int c);
+#include "gameOfLife.h"
 
 /*****************************************************************
  * ---------------- Conway's Game of Life.
@@ -53,6 +43,10 @@ int getCBounds(int j, int c);
  * @created 02/07/2018
  *****************************************************************/
 
+
+    // 4 global variables are used
+    // okay for a project, not okay for production software
+
     /* Boards for the game */
     char **og_board, **temp_board;
 
@@ -61,6 +55,7 @@ int getCBounds(int j, int c);
 
     /* Number of columns in active table */
     int cols = 0;
+
 /*****************************************************************
  * Main function of the Game of Life.
  * Initially prompts the user what they wish to do, then handles
@@ -77,10 +72,6 @@ int main(int argc, char const *argv[])
 
     /* Buffer to hold file information */
     char *buffer;
-
-
-
-
 
     welcome();
 
@@ -222,6 +213,7 @@ int getCBounds(int j, int c)
     return c;
 }
 
+
 /*****************************************************************
  * Saves the players current board to the file that the user
  * inputs via the command line.
@@ -357,29 +349,6 @@ void printBoard( int r, int c )
 }
 
 /*****************************************************************
- * Ask and return the user what they wish to do with the program.
- * This will only be ran if command line parameters are
- * not passed with the executable filename.
- *
- * @return
- *****************************************************************/
-int promptUser()
-{
-    /* User input */
-    char c[3];
-
-	printf("Please select an option below:\n");
-	printf("(1) Live one generation\n");
-	printf("(2) Live through 10 generations\n");
-	printf("(3) Load a previously saved board by filename\n");
-	printf("(4) Save current file state by filename \n");
-	printf("(5) Exit\n");
-	fflush(stdin);
-    fgets(c, 3, stdin);
-    return atoi(c); // return user response
-}
-
-/*****************************************************************
  * Frees all of the memory in the heap that was allocated for the
  * original board.
  *****************************************************************/
@@ -394,6 +363,30 @@ void freeBoard()
             free(og_board[i]);
         free(og_board);
     }
+}
+
+
+/*****************************************************************
+ * Ask and return the user what they wish to do with the program.
+ * This will only be ran if command line parameters are
+ * not passed with the executable filename.
+ *
+ * @return
+ *****************************************************************/
+int promptUser()
+{
+    /* User input */
+    char c[3];
+
+    printf("Please select an option below:\n");
+    printf("(1) Live one generation\n");
+    printf("(2) Live through 10 generations\n");
+    printf("(3) Load a previously saved board by filename\n");
+    printf("(4) Save current file state by filename \n");
+    printf("(5) Exit\n");
+    fflush(stdin);
+    fgets(c, 3, stdin);
+    return atoi(c); // return user response
 }
 
 /*****************************************************************
