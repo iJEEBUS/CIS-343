@@ -5,10 +5,12 @@
 void createBoard(int r, int c);
 void printBoard(int rows, int columns);
 void freeBoard();
-void loadBoard();
+void loadBoard(char *file);
 int promptUser();
 int update(int n);
-int saveBoard();
+int saveBoard(char *file);
+void welcome();
+int getCBounds(int j, int c);
 
 /*****************************************************************
  * ---------------- Conway's Game of Life.
@@ -51,21 +53,14 @@ int saveBoard();
  * @created 02/07/2018
  *****************************************************************/
 
-/* File from user input */
-char file[30];
+    /* Boards for the game */
+    char **og_board, **temp_board;
 
-/* Buffer to hold file information */
-char *buffer;
+    /* Number of rows in active table */
+    int rows = 0;
 
-/* Boards for the game */
-char **og_board, **temp_board;
-
-/* Number of rows in active table */
-int rows = 0;
-
-/* Number of columns in active table */
-int cols = 0;
-
+    /* Number of columns in active table */
+    int cols = 0;
 /*****************************************************************
  * Main function of the Game of Life.
  * Initially prompts the user what they wish to do, then handles
@@ -77,25 +72,17 @@ int cols = 0;
  *****************************************************************/
 int main(int argc, char const *argv[])
 {
-    printf("\n");
-    printf("\n");
-    printf("  ---------------- Conway's Game of Life ----------------\n"
-                   "  Features include:\n"
-                   "   - save and load files\n"
-                   "   - textUI to view cells\n"
-                   "   - dynamic memory allocation\n"
-                   " \n"
-                   "   FYI:\n"
-                   "   - if a cell is white, it is alive\n"
-                   "   - if a cell is blue, it is dead\n"
-                   " \n"
-                   "  How to play:\n"
-                   "   1) Enter the number next to the desired functionality.\n"
-                   "   2) Enjoy!\n"
-                   "   P.S. Load one of the two data sets included \n"
-                   "        (massive.txt, save_data.txt)\n");
-    printf("\n");
-    printf("\n");
+    /* File from user input */
+    char file[30];
+
+    /* Buffer to hold file information */
+    char *buffer;
+
+
+
+
+
+    welcome();
 
     while (1) {
         switch(promptUser()) {
@@ -108,12 +95,12 @@ int main(int argc, char const *argv[])
             case 3: // load board form file
                 printf("Name of file to load: \n");
                 fgets(file, 31, stdin);
-                loadBoard();
+                loadBoard(file);
                 break;
             case 4: // save board to a file
                 printf("Name of file to save: \n");
                 fgets(file, 31, stdin);
-                saveBoard();
+                saveBoard(file);
                 break;
             case 5: // exit game
                 printf("\nFreeing memory...");
@@ -136,7 +123,7 @@ int main(int argc, char const *argv[])
 int update(int n)
 {
     int g = 0, j = 0, i = 0;
-    
+
     /* Null checking */
     if (og_board == NULL)
     {
@@ -145,7 +132,7 @@ int update(int n)
         return 1;
     }
     /* For number of generations. */
-    for (g; g < n; g++)
+    for (g = g; g < n; g++)
     {
         /* Clear temp_board */
         for (i = 0; i < rows; i++)
@@ -181,7 +168,7 @@ int update(int n)
                 else if (j == (cols - 1))
                     ccap--;
 
-                for (r; r <= rcap; r++) {
+                for (r = r; r <= rcap; r++) {
                     /* Must recalculate the location of the left-bound
                      * variable, c, after each incrementation */
                     for (c = getCBounds(j,c); c <= ccap; c++) {
@@ -241,7 +228,7 @@ int getCBounds(int j, int c)
  *
  * @return
  *****************************************************************/
-int saveBoard()
+int saveBoard(char *file)
 {
     int i, j, size;
     char *str;
@@ -269,7 +256,7 @@ int saveBoard()
  * Loads the board from the file that the user inputs via the
  * command line.
  *****************************************************************/
-void loadBoard()
+void loadBoard(char *file)
 {
     char *str;
     int size;
@@ -407,4 +394,31 @@ void freeBoard()
             free(og_board[i]);
         free(og_board);
     }
+}
+
+/*****************************************************************
+ * Welcome banner when the user first starts the game.
+ * No functional usage.
+ *****************************************************************/
+void welcome()
+{
+    printf("\n");
+    printf("\n");
+    printf("  ---------------- Conway's Game of Life ----------------\n"
+                   "  Features include:\n"
+                   "   - save and load files\n"
+                   "   - textUI to view cells\n"
+                   "   - dynamic memory allocation\n"
+                   " \n"
+                   "   FYI:\n"
+                   "   - if a cell is white, it is alive\n"
+                   "   - if a cell is blue, it is dead\n"
+                   " \n"
+                   "  How to play:\n"
+                   "   1) Enter the number next to the desired functionality.\n"
+                   "   2) Enjoy!\n"
+                   "   P.S. Load one of the two data sets included \n"
+                   "        (massive.txt, save_data.txt)\n");
+    printf("\n");
+    printf("\n");
 }
