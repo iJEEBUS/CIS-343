@@ -3,15 +3,15 @@
 	#include <stdlib.h>
 	#include "zoomjoystrong.tab.h"
 	int val_int = 0;
-	float val_float = 0
+	float val_float = 0;
 %}
 
 %option noyywrap
 
 %%
 
-[0-9]+ 		{ yyval.val_int = atoi(yytext); return INT; }
-[0-9]*\.[0-9]+	{ yyval.val_float = atoi(yytext); return FLOAT; }
+[0-9]+ 		{ yylval.val_int = atoi(yytext); return INT; }
+[0-9]*\.[0-9]+	{ yylval.val_float = atoi(yytext); return FLOAT; }
 point 		{ return POINT; }
 line		{ return LINE; }
 circle		{ return CIRCLE; }
