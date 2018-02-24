@@ -47,7 +47,8 @@
      RECTANGLE = 263,
      SET_COLOR = 264,
      END_STATEMENT = 265,
-     END = 266
+     END = 266,
+     ERROR_INVALID = 267
    };
 #endif
 /* Tokens.  */
@@ -60,19 +61,20 @@
 #define SET_COLOR 264
 #define END_STATEMENT 265
 #define END 266
+#define ERROR_INVALID 267
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 11 "zoomjoystrong.y"
+#line 12 "zoomjoystrong.y"
 {
 	int val_int;
 	float val_float;
 }
 /* Line 1529 of yacc.c.  */
-#line 76 "zoomjoystrong.tab.h"
+#line 78 "zoomjoystrong.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

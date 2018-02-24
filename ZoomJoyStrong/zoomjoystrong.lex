@@ -10,15 +10,16 @@
 
 %%
 
-[0-9]+ 		{ yylval.val_int = atoi(yytext); return INT; }
-[0-9]*\.[0-9]+	{ yylval.val_float = atoi(yytext); return FLOAT; }
-point 		{ return POINT; }
-line		{ return LINE; }
-circle		{ return CIRCLE; }
-rectangle	{ return RECTANGLE; }
-set_color	{ return SET_COLOR; }
-;		{ return END_STATEMENT; }
-[\t|\n]		;
-.		{ printf("Don't do that again lmao"); }
+[0-9]+ 			{ yylval.val_int = atoi(yytext); return INT; }
+[0-9]*\.[0-9]+	{ yylval.val_float = atof(yytext); return FLOAT; }
+point 			{ return POINT; }
+line			{ return LINE; }
+circle			{ return CIRCLE; }
+rectangle		{ return RECTANGLE; }
+set_color		{ return SET_COLOR; }
+end				{ return END; }
+;				{ return END_STATEMENT; }
+[\t\n\s]		;
+(^(point)|(line)|(circle)|(rectangle)|(set_color|(end)|(;)|[0-9]))	{ return ERROR_INVALID; }
 
 %%
