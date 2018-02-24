@@ -23,3 +23,29 @@
 %token SET_COLOR
 %token END_STATEMENT
 %token END
+
+%%
+program:		statement_list END END_STATEMENT 	{ finish(); return 0; }
+	|		END END_STATEMENT			{ finish(); return 0; }
+	;
+statement_list:		statement
+	|		statement statement_list
+	;
+statement:		point
+	|		line
+	|		circle
+	|		rectangle
+	| 		set_color
+	;
+
+%%
+
+int main() {
+	setup();
+	yyparse();
+	return 0;
+}
+
+int yyerror(char* s) {
+	fprint(stderr, "%s on %s\n", s,yytext);
+}
