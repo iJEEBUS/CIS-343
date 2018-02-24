@@ -1,9 +1,8 @@
 %{
 	#include <stdio.h>
 	#include "zoomjoystrong.h"
-	int yylex();
 	void yyerror(char* s);
-	extern char * yytext;
+	int yylex();
 %}
 
 %error-verbose
@@ -14,20 +13,20 @@
 	float val_float;
 }
 
-/** tokens **/
+/* tokens */
 %token <val_int> INT
 %token <val_float> FLOAT
+%token END
+%token END_STATEMENT
 %token POINT
 %token LINE
 %token CIRCLE
 %token RECTANGLE
 %token SET_COLOR
-%token END_STATEMENT
-%token END
 %token ERROR_INVALID
 
 %%
-program:		statement_list end 	{ finish(); return 0; }
+program:		statement_list end; 	
 	;
 statement_list:		statement
 	|				statement statement_list
@@ -46,7 +45,7 @@ point:			POINT INT INT END_STATEMENT
 				if ($3 < 0 || $3 > 768)
 					yyerror("Second coordinate is out of range.");
 				else
-					point($2, $3)
+					point($2, $3);
 	}
 	;
 line:			LINE INT INT INT INT END_STATEMENT	
@@ -60,7 +59,7 @@ line:			LINE INT INT INT INT END_STATEMENT
 				if ($5 < 0 || $5 > 768)
 					yyerror("Fourth coordinate out of range.");
 				else
-					line($2, $3, $4, $5)
+					line($2, $3, $4, $5);
 	}
 	;
 circle:			CIRCLE INT INT INT END_STATEMENT	
@@ -72,7 +71,7 @@ circle:			CIRCLE INT INT INT END_STATEMENT
 				if ($4 < 0 || $4 > 1024)
 					yyerror("Third coordinate out of range.");			
 				else
-					circle($2, $3, $4)
+					circle($2, $3, $4);
 	}		
 	;
 rectangle:		RECTANGLE INT INT INT INT END_STATEMENT	
@@ -95,10 +94,9 @@ set_color:		SET_COLOR INT INT INT END_STATEMENT
 					yyerror("First coordinate out of range.");
 				if ($3 < 0 || $3 > 255)
 					yyerror("Second coordinate out of range.");
-				if ($3 < 0 || $3 > 255)
-					yyerror("Third coordinate out of range.");
-				else			
-					set_color($2, $3, $4)
+				if ($4 < 0 || $4 > 255)
+					yyerror("Third coordinate out of range.");			
+				set_color($2, $3, $4);
 	}
 	;
 end:			END END_STATEMENT
@@ -115,9 +113,12 @@ error_invalid:			ERROR_INVALID
 %%
 
 int main() {
+
+	printf("\nErrors produced:\n\n");
+
 	setup();
-	yyparse();
-	return 0;
+	return(yyparse());
+	finish();
 }
 
 void yyerror(char* s) {

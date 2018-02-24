@@ -41,26 +41,26 @@
    enum yytokentype {
      INT = 258,
      FLOAT = 259,
-     POINT = 260,
-     LINE = 261,
-     CIRCLE = 262,
-     RECTANGLE = 263,
-     SET_COLOR = 264,
-     END_STATEMENT = 265,
-     END = 266,
+     END = 260,
+     END_STATEMENT = 261,
+     POINT = 262,
+     LINE = 263,
+     CIRCLE = 264,
+     RECTANGLE = 265,
+     SET_COLOR = 266,
      ERROR_INVALID = 267
    };
 #endif
 /* Tokens.  */
 #define INT 258
 #define FLOAT 259
-#define POINT 260
-#define LINE 261
-#define CIRCLE 262
-#define RECTANGLE 263
-#define SET_COLOR 264
-#define END_STATEMENT 265
-#define END 266
+#define END 260
+#define END_STATEMENT 261
+#define POINT 262
+#define LINE 263
+#define CIRCLE 264
+#define RECTANGLE 265
+#define SET_COLOR 266
 #define ERROR_INVALID 267
 
 
@@ -68,7 +68,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 12 "zoomjoystrong.y"
+#line 11 "zoomjoystrong.y"
 {
 	int val_int;
 	float val_float;
