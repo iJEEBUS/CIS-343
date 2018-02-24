@@ -45,7 +45,17 @@ circle:			CIRCLE INT INT INT END_STATEMENT	{ circle($2, $3, $4) }
 	;
 rectangle:		RECTANGLE INT INT INT INT END_STATEMENT	{ rectangle($2, $3, $4, $5) }
 	;
-set_color:		SET_COLOR INT INT INT END_STATEMENT	{ set_color($2, $3, $4) }
+set_color:		SET_COLOR INT INT INT END_STATEMENT	
+	{ 
+			if ($2 < 0 || $2 > 255)
+				yyerror("%d out of range.", $2);
+			if ($3 < 0 || $3 > 255)
+				yyerror("%d out of range.", $3);
+			if ($3 < 0 || $3 > 255)
+				yyerror("%d out of range.", $3);
+			else			
+				set_color($2, $3, $4)
+	}
 	;
 %%
 
@@ -56,5 +66,5 @@ int main() {
 }
 
 int yyerror(char* s) {
-	fprint(stderr, "%s on %s\n", s,yytext);
+	fprint(stderr, "%s\n", s);
 }
