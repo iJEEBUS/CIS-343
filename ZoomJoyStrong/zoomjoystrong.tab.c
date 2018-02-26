@@ -1668,4 +1668,3 @@ int main() {
 void yyerror(char* s) {
 	printf("%s\n", s);
 }
-
