@@ -77,7 +77,7 @@ point:			POINT INT INT END_STATEMENT
 	;
 line:			LINE INT INT INT INT END_STATEMENT	
 	{
-				printf("Drawing line - x: %d y: %d u: %d v: %d\n", $2, $3, $4, $5);
+				printf("Drawing line - x1: %d y1: %d x2: %d y2: %d\n", $2, $3, $4, $5);
 
 				// error checking for valid inputs
 				// executes command if all valid
