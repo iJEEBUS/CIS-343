@@ -1,5 +1,4 @@
 %{
-
 	/********************************************************************************
 	* This Bison file uses the lex tokens (defined in zoomjoystrong.lex) 
 	* to call on functions as they are defined in the included zoomjoystrong.c
@@ -12,13 +11,13 @@
 	* @version 1.20
 	* @date 3/12/2018
 	********************************************************************************/
-	
+
 	#include <stdio.h>
 	#include "zoomjoystrong.h"
 	void yyerror(char* s);
 	int yylex();
-	int H = 768;
-	int W = 1024;
+	int H = 768; // maximum drawing height
+	int W = 1024; // maximum drawing width
 %}
 
 %error-verbose
@@ -38,6 +37,7 @@
 %token SET_COLOR
 %token ERROR_INVALID
 
+/* token types */
 %type<val_int> INT
 %type<val_float> FLOAT
 %type<str> END
@@ -63,7 +63,10 @@ statement:		point
 	;
 point:			POINT INT INT END_STATEMENT		
 	{
-				printf("Plotting point - x: %d y: %d\n", $2, $3); 
+				printf("Plotting point - x: %d y: %d\n", $2, $3);
+
+				// error checking for valid inputs
+				// executes command if all valid
 				if ($2 < 0 || $2 > W)
 					yyerror("First coordinate is out of range (max: 1024)");
 				if ($3 < 0 || $3 > H)
@@ -75,6 +78,9 @@ point:			POINT INT INT END_STATEMENT
 line:			LINE INT INT INT INT END_STATEMENT	
 	{
 				printf("Drawing line - x: %d y: %d u: %d v: %d\n", $2, $3, $4, $5);
+
+				// error checking for valid inputs
+				// executes command if all valid
 				if ($2 < 0 || $2 > W)
 					yyerror("First coordinate out of range (max: 1024)");
 				if ($3 < 0 || $3 > H)
@@ -89,7 +95,10 @@ line:			LINE INT INT INT INT END_STATEMENT
 	;
 circle:			CIRCLE INT INT INT END_STATEMENT	
 	{ 
-				printf("Displaying circle - x: %d y: %d r: %d\n", $2, $3, $4); 
+				printf("Displaying circle - x: %d y: %d r: %d\n", $2, $3, $4);
+
+				// error checking for valid inputs
+				// executes command if all valid
 				if ($2 < 0 || $2 > W)
 					yyerror("First coordinate out of range (max: 1024)");
 				if ($3 < 0 || $3 > H)
@@ -103,6 +112,9 @@ circle:			CIRCLE INT INT INT END_STATEMENT
 rectangle:		RECTANGLE INT INT INT INT END_STATEMENT	
 	{ 	
 				printf("Creating a rectangle - x: %d y: %d w: %d h: %d\n", $2, $3, $4, $5);
+
+				// error checking for valid inputs
+				// executes command if all valid
 				if ($2 < 0 || $2 > W)
 					yyerror("First coordinate out of range (max: 1024)");
 				if ($3 < 0 || $3 > H)
@@ -118,16 +130,18 @@ rectangle:		RECTANGLE INT INT INT INT END_STATEMENT
 set_color:		SET_COLOR INT INT INT END_STATEMENT	
 	{ 
 				printf("Color now set - red: %d green: %d blue: %d\n", $2, $3, $4); 
+
+				// error checking for valid inputs
+				// executes command if all valid
 				if ($2 < 0 || $2 > 255)
 					yyerror("First coordinate out of range.");
 				if ($3 < 0 || $3 > 255)
 					yyerror("Second coordinate out of range.");
 				if ($4 < 0 || $4 > 255)
 					yyerror("Third coordinate out of range.");
-				set_color($2, $3, $4);
+				else
+					set_color($2, $3, $4);
 					
-				
-				
 	}
 	;
 				
@@ -147,6 +161,12 @@ error_invalid:			ERROR_INVALID
 	;
 %%
 
+/********************************************************************************
+* Executes the setup and parsing of the user input in order to allow them to 
+* draw on the screen by using specified commands.
+*
+* @return int
+********************************************************************************/
 int main() {
 	
 	setup();
@@ -167,6 +187,11 @@ int main() {
 	finish();
 }
 
+/********************************************************************************
+* Displays the error to the user as it is encountered.
+*
+* @param s error to display
+********************************************************************************/
 void yyerror(char* s) {
 	printf("%s\n", s);
 	yyparse();

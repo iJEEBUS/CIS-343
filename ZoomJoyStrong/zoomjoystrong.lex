@@ -1,5 +1,4 @@
 %{
-
 	/********************************************************************************
 	* This flex file is used to define the tokens of our language, which will 
 	* be used in the zoomjoystrong.y 
@@ -12,7 +11,7 @@
 	* @version 1.20
 	* @date 3/12/2018
 	********************************************************************************/
-	
+
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include "zoomjoystrong.tab.h"
