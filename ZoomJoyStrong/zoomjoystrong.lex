@@ -1,4 +1,18 @@
 %{
+
+	/********************************************************************************
+	* This flex file is used to define the tokens of our language, which will 
+	* be used in the zoomjoystrong.y 
+	*
+	* References: 
+	* 	https://regexr.com/
+	* 	https://github.com/irawoodring/343/tree/master/parsing-with-bison/sample_code
+	*
+	* @author Ronald Rounsifer
+	* @version 1.20
+	* @date 3/12/2018
+	********************************************************************************/
+	
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include "zoomjoystrong.tab.h"

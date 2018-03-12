@@ -68,13 +68,10 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 11 "zoomjoystrong.y"
-{
-	int val_int;
-	float val_float;
-}
+#line 13 "zoomjoystrong.y"
+{ int val_int; float val_float; char* str; }
 /* Line 1529 of yacc.c.  */
-#line 78 "zoomjoystrong.tab.h"
+#line 75 "zoomjoystrong.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

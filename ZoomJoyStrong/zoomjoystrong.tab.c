@@ -100,6 +100,8 @@
 	#include "zoomjoystrong.h"
 	void yyerror(char* s);
 	int yylex();
+	int H = 768;
+	int W = 1024;
 
 
 /* Enabling traces.  */
@@ -122,13 +124,10 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 11 "zoomjoystrong.y"
-{
-	int val_int;
-	float val_float;
-}
+#line 13 "zoomjoystrong.y"
+{ int val_int; float val_float; char* str; }
 /* Line 193 of yacc.c.  */
-#line 132 "zoomjoystrong.tab.c"
+#line 131 "zoomjoystrong.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -141,7 +140,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 145 "zoomjoystrong.tab.c"
+#line 144 "zoomjoystrong.tab.c"
 
 #ifdef short
 # undef short
@@ -429,8 +428,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    29,    29,    31,    32,    34,    35,    36,    37,    38,
-      39,    41,    51,    65,    77,    91,   102,   108
+       0,    38,    38,    40,    41,    43,    44,    45,    46,    47,
+      48,    50,    61,    76,    89,   104,   120,   128
 };
 #endif
 
@@ -1352,94 +1351,105 @@ yyreduce:
   switch (yyn)
     {
         case 11:
-#line 42 "zoomjoystrong.y"
+#line 51 "zoomjoystrong.y"
     {
-				if ((yyvsp[(2) - (4)].val_int) < 0 || (yyvsp[(2) - (4)].val_int) > 1024)
-					yyerror("First coordinate is out of range.");
-				if ((yyvsp[(3) - (4)].val_int) < 0 || (yyvsp[(3) - (4)].val_int) > 768)
-					yyerror("Second coordinate is out of range.");
+				printf("Plotting point - x: %d y: %d\n", (yyvsp[(2) - (4)].val_int), (yyvsp[(3) - (4)].val_int)); 
+				if ((yyvsp[(2) - (4)].val_int) < 0 || (yyvsp[(2) - (4)].val_int) > W)
+					yyerror("First coordinate is out of range (max: 1024)");
+				if ((yyvsp[(3) - (4)].val_int) < 0 || (yyvsp[(3) - (4)].val_int) > H)
+					yyerror("Second coordinate is out of range (max: 768)");
 				else
 					point((yyvsp[(2) - (4)].val_int), (yyvsp[(3) - (4)].val_int));
 	;}
     break;
 
   case 12:
-#line 52 "zoomjoystrong.y"
+#line 62 "zoomjoystrong.y"
     {
-				if ((yyvsp[(2) - (6)].val_int) < 0 || (yyvsp[(2) - (6)].val_int) > 1024)
-					yyerror("First coordinate out of range.");
-				if ((yyvsp[(3) - (6)].val_int) < 0 || (yyvsp[(3) - (6)].val_int) > 768)
-					yyerror("Second coordinate out of range.");
-				if ((yyvsp[(4) - (6)].val_int) < 0 || (yyvsp[(4) - (6)].val_int) > 1024)
-					yyerror("Third coordinate out of range.");
-				if ((yyvsp[(5) - (6)].val_int) < 0 || (yyvsp[(5) - (6)].val_int) > 768)
-					yyerror("Fourth coordinate out of range.");
+				printf("Drawing line - x: %d y: %d u: %d v: %d\n", (yyvsp[(2) - (6)].val_int), (yyvsp[(3) - (6)].val_int), (yyvsp[(4) - (6)].val_int), (yyvsp[(5) - (6)].val_int));
+				if ((yyvsp[(2) - (6)].val_int) < 0 || (yyvsp[(2) - (6)].val_int) > W)
+					yyerror("First coordinate out of range (max: 1024)");
+				if ((yyvsp[(3) - (6)].val_int) < 0 || (yyvsp[(3) - (6)].val_int) > H)
+					yyerror("Second coordinate out of range (max: 768)");
+				if ((yyvsp[(4) - (6)].val_int) < 0 || (yyvsp[(4) - (6)].val_int) > W)
+					yyerror("Third coordinate out of range (max: 1024)");
+				if ((yyvsp[(5) - (6)].val_int) < 0 || (yyvsp[(5) - (6)].val_int) > H)
+					yyerror("Fourth coordinate out of range (max: 768)");
 				else
 					line((yyvsp[(2) - (6)].val_int), (yyvsp[(3) - (6)].val_int), (yyvsp[(4) - (6)].val_int), (yyvsp[(5) - (6)].val_int));
 	;}
     break;
 
   case 13:
-#line 66 "zoomjoystrong.y"
+#line 77 "zoomjoystrong.y"
     { 
-				if ((yyvsp[(2) - (5)].val_int) < 0 || (yyvsp[(2) - (5)].val_int) > 1024)
-					yyerror("First coordinate out of range.");
-				if ((yyvsp[(3) - (5)].val_int) < 0 || (yyvsp[(3) - (5)].val_int) > 768)
-					yyerror("Second coordinate out of range.");
-				if ((yyvsp[(4) - (5)].val_int) < 0 || (yyvsp[(4) - (5)].val_int) > 1024)
-					yyerror("Third coordinate out of range.");			
+				printf("Displaying circle - x: %d y: %d r: %d\n", (yyvsp[(2) - (5)].val_int), (yyvsp[(3) - (5)].val_int), (yyvsp[(4) - (5)].val_int)); 
+				if ((yyvsp[(2) - (5)].val_int) < 0 || (yyvsp[(2) - (5)].val_int) > W)
+					yyerror("First coordinate out of range (max: 1024)");
+				if ((yyvsp[(3) - (5)].val_int) < 0 || (yyvsp[(3) - (5)].val_int) > H)
+					yyerror("Second coordinate out of range (max: 768)");
+				if ((yyvsp[(4) - (5)].val_int) < 0 || (yyvsp[(4) - (5)].val_int) > W)
+					yyerror("Third coordinate out of range (max: 1024)");			
 				else
 					circle((yyvsp[(2) - (5)].val_int), (yyvsp[(3) - (5)].val_int), (yyvsp[(4) - (5)].val_int));
 	;}
     break;
 
   case 14:
-#line 78 "zoomjoystrong.y"
+#line 90 "zoomjoystrong.y"
     { 	
-				if ((yyvsp[(2) - (6)].val_int) < 0 || (yyvsp[(2) - (6)].val_int) > 1024)
-					yyerror("First coordinate out of range.");
-				if ((yyvsp[(3) - (6)].val_int) < 0 || (yyvsp[(3) - (6)].val_int) > 768)
-	                                yyerror("Second coordinate out of range.");
-				if ((yyvsp[(4) - (6)].val_int) < 0 || (yyvsp[(4) - (6)].val_int) > 1024)
-	                                yyerror("Third coordinate out of range.");
-				if ((yyvsp[(5) - (6)].val_int) < 0 || (yyvsp[(5) - (6)].val_int) > 768)
-	                                yyerror("Fourth coordinate out of range.");
+				printf("Creating a rectangle - x: %d y: %d w: %d h: %d\n", (yyvsp[(2) - (6)].val_int), (yyvsp[(3) - (6)].val_int), (yyvsp[(4) - (6)].val_int), (yyvsp[(5) - (6)].val_int));
+				if ((yyvsp[(2) - (6)].val_int) < 0 || (yyvsp[(2) - (6)].val_int) > W)
+					yyerror("First coordinate out of range (max: 1024)");
+				if ((yyvsp[(3) - (6)].val_int) < 0 || (yyvsp[(3) - (6)].val_int) > H)
+					yyerror("Second coordinate out of range (max: 768)");
+				if ((yyvsp[(4) - (6)].val_int) < 0 || (yyvsp[(4) - (6)].val_int) > W)
+					yyerror("Third coordinate out of range (max: 1024)");
+				if ((yyvsp[(5) - (6)].val_int) < 0 || (yyvsp[(5) - (6)].val_int) > H)
+					yyerror("Fourth coordinate out of range (max: 768)");
 				else
 					rectangle((yyvsp[(2) - (6)].val_int), (yyvsp[(3) - (6)].val_int), (yyvsp[(4) - (6)].val_int), (yyvsp[(5) - (6)].val_int));
 	;}
     break;
 
   case 15:
-#line 92 "zoomjoystrong.y"
+#line 105 "zoomjoystrong.y"
     { 
+				printf("Color now set - red: %d green: %d blue: %d\n", (yyvsp[(2) - (5)].val_int), (yyvsp[(3) - (5)].val_int), (yyvsp[(4) - (5)].val_int)); 
 				if ((yyvsp[(2) - (5)].val_int) < 0 || (yyvsp[(2) - (5)].val_int) > 255)
 					yyerror("First coordinate out of range.");
 				if ((yyvsp[(3) - (5)].val_int) < 0 || (yyvsp[(3) - (5)].val_int) > 255)
 					yyerror("Second coordinate out of range.");
 				if ((yyvsp[(4) - (5)].val_int) < 0 || (yyvsp[(4) - (5)].val_int) > 255)
-					yyerror("Third coordinate out of range.");			
+					yyerror("Third coordinate out of range.");
 				set_color((yyvsp[(2) - (5)].val_int), (yyvsp[(3) - (5)].val_int), (yyvsp[(4) - (5)].val_int));
+					
+				
+				
 	;}
     break;
 
   case 16:
-#line 103 "zoomjoystrong.y"
+#line 121 "zoomjoystrong.y"
     {
+				printf("\n┻━┻︵╰(゜Д゜)╯︵┻━┻\n");
+				printf("I hope you enjoyed your time with ZoomJoyStrong, goodbye!\n");
 				finish();
 				exit(0);
 	;}
     break;
 
   case 17:
-#line 109 "zoomjoystrong.y"
+#line 129 "zoomjoystrong.y"
     {
 				yyerror("Invalid input.");
+				yyparse();
 	;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1443 "zoomjoystrong.tab.c"
+#line 1453 "zoomjoystrong.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1653,18 +1663,30 @@ yyreturn:
 }
 
 
-#line 113 "zoomjoystrong.y"
+#line 134 "zoomjoystrong.y"
 
 
 int main() {
-
-	printf("\nErrors produced:\n\n");
-
+	
 	setup();
-	return(yyparse());
+
+	printf("\n┻━┻︵╰(゜Д゜)╯︵┻━┻\n");
+	printf("This is: ZoomJoyStrong \n\n");
+	printf("Legal commands: \n");
+	printf("set_color 000 000 000;\n");
+	printf("point x y;\n");
+	printf("line x1 y1 x2 y2;\n");
+	printf("circle x y r;\n");
+	printf("rectangle x y w h;\n");
+	printf("end; -- to terminate the program\n\n");
+	printf("** NOTE: all commands must end with a semi-colon as shown above **\n");
+	printf("\nBegin drawing!\n\n");
+
+	yyparse();
 	finish();
 }
 
 void yyerror(char* s) {
 	printf("%s\n", s);
+	yyparse();
 }
