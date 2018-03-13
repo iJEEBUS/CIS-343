@@ -4,58 +4,60 @@ from random import randint
 class Monster(Observable):
 	def __init__(self, random_monster):
 		super().__init__()
+		self.random_monster = random_monster
 		
-		monsters = {0:	{"Name" : "Person",
-							"Hit_points" : 100,
+		monsters = {0 :	{"Name" : "Person",
+							"HP" : 100,
 							"Attack" : -1,
 							"Hershey Kisses" : 1,
 							"Sour Straws": 2,
 							"Chocolate Bars" : 1,
 							"Nerd Bombs" : 1},
-					1:	{"Name": "Zombie",
-							"Hit_points" : randint(50, 100),
+					1 :	{"Name": "Zombie",
+							"HP" : randint(50, 100),
 							"Attack" : randint(0, 10),
 							"Hershey Kisses" : 1,
 							"Sour Straws": 2,
 							"Chocolate Bars" : 1,
 							"Nerd Bombs" : 1},
-					2:	{"Name" : "Vampire",
-							"Hit_points" : randint(100,200),
+					2 :	{"Name" : "Vampire",
+							"HP" : randint(100,200),
 							"Attack" : randint(10, 20),
 							"Hershey Kisses" : 1,
 							"Sour Straws": 1,
 							"Chocolate Bars" : 0,
 							"Nerd Bombs" : 1},
-					3:	{"Name" : "Ghoul",
-							"Hit_points" : randint(40,80),
+					3 :	{"Name" : "Ghoul",
+							"HP" : randint(40,80),
 							"Attack" : randint(15, 30),
 							"Hershey Kisses" : 1,
 							"Sour Straws": 1,
 							"Chocolate Bars" : 1,
 							"Nerd Bombs" : 5},
-					4:	{"Name" : "Werewolf",
-							"Hit_points" : 200,
+					4 :	{"Name" : "Werewolf",
+							"HP" : 200,
 							"Attack" : randint(0, 40),
 							"Hershey Kisses" : 1,
 							"Sour Straws": 0,
 							"Chocolate Bars" : 0,
 							"Nerd Bombs" : 1},
 					}
-		self.name = monsters[random_monster["Name"]]
-		self.hit_points = monsters[random_monster["Hit_points"]]
+		self.monster = monsters[self.random_monster]
+		self.name = monsters[self.random_monster]["Name"]
+		self.HP = monsters[self.random_monster]["Name"]
 		self.type = random_monster
 
 
 	def attack(self):
 		return self.monsters[self.type["Attack"]]
 	def take_damage(self, damage, weapon):
-		self.hit_points = damage * monsters[self.type[weapon]]
-		if self.hit_points < 1:
+		self.HP = damage * monsters[self.type[weapon]]
+		if self.HP < 1:
 			self.update(self) 
 	def get_name(self):
 		return self.name
-	def get_hit_points(self):
-		return self.hit_points
+	def get_HP(self):
+		return self.HP
 	def get_type():
 		return self.type
 		
