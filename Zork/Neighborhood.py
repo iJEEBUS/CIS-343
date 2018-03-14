@@ -1,5 +1,6 @@
 from House import House
 from Observer import Observer
+from random import randint
 
 
 class Neighborhood(Observer):
@@ -10,23 +11,25 @@ class Neighborhood(Observer):
 		
 		row = 0
 
-		while row < self.rows:
-			col = 0
+		for row in range(0, self.rows):
 			self.neighborhood.append([])
-			while col < self.cols:
-				
-				# This may or may not work
-				# if it does not then use the code below that is commented out.
-				self.neighborhood[row].append(House())
-				
+			for col in range(0, self.cols):
+				self.neighborhood[row].append(House(randint(0,10)))
+			
 				self.neighborhood[row][col].add_observer(self)
-				col += 1
-			row += 1
 
 
 	def showNeighborhood(self):
+		row_count, col_count = 0, 0
 
 		for row in self.neighborhood:
+
 			for col in row:
-				print("\x1b[37m\u2588", end=" ")
+				col_count = 0
+				if col_count < self.cols:
+					print(self.neighborhood[row_count][col_count].numMonsters(), end=" ")
+					col_count += 1
+				#print("\x1b[37m\u2588", end=" ")
+			if row_count < self.rows:
+				row_count += 1
 			print('\n')
