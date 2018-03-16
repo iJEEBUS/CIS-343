@@ -15,7 +15,7 @@ class Weapon(Observable):
 		Initial constructor for when a new Weapon instance in created.
 		
 		Arguments:
-			weapon_type {[int]} -- [the type of weapon to make use of]
+			weapon_type {int} -- the type of weapon to make use of
 		"""
 
 		super().__init__()
@@ -43,7 +43,7 @@ class Weapon(Observable):
 		"""
 		Returns the damage done by the current weapon during an attack.
 		Returns:
-			[int] -- [amount of damage done by weapon]
+			int -- amount of damage done by weapon
 		"""
 		return self.weapons[weapon_type]["Attack"]
 
@@ -52,7 +52,7 @@ class Weapon(Observable):
 		"""
 		Returns the type of the current weapon.
 		Returns:
-			[int] -- [type of weapon]
+			int -- type of weapon
 		"""
 		return self.weapon_type
 
@@ -61,7 +61,7 @@ class Weapon(Observable):
 		"""
 		Returns how many uses the current weapon has left.
 		Returns:
-			[int] -- [number of uses before weapon breaks]
+			int -- number of uses before weapon breaks
 		"""
 		return self.uses_left
 
@@ -70,6 +70,6 @@ class Weapon(Observable):
 		"""
 		Returns the name of the current weapon.
 		Returns:
-			[str] -- [name of the weapon]
+			str -- name of the weapon
 		"""
 		return self.name

@@ -17,7 +17,21 @@ class Player(object):
 		self.attack = randint(10, 20)
 		self.inventory = [ Weapon(randint(0,3)) for y in range(10)]
 		self.current_weapon = self.inventory[0]
+		self.loc_x = 0
+		self.loc_y = 0
 
+
+	def setLocationX(self, x):
+		self.loc_x = x
+
+	def setLocationY(self, y):
+		self.loc_y = y
+
+	def getLocationX(self):
+		return self.loc_x
+
+	def getLocationY(self):
+		return self.loc_y
 
 	def getHP(self):
 		"""
@@ -53,7 +67,6 @@ class Player(object):
 			list -- player weapons inventory
 		"""
 		return self.inventory
-
 
 	def listInventory(self):
 		"""
