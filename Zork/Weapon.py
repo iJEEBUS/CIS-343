@@ -21,7 +21,7 @@ class Weapon(Observable):
 		super().__init__()
 		self.weapon_type = weapon_type
 
-		weapons =  {0: {"Name" : "Hershey Kisses", 
+		self.weapons =  {0: {"Name" : "Hershey Kisses", 
 						  "Uses left": 1000,
 						  "Attack": 1},
 					1:	{"Name" : "Sour Straws",
@@ -34,9 +34,9 @@ class Weapon(Observable):
 						  "Uses left": 1,
 						  "Attack": randint(50,200)/100.00 + 3}
 					}
-		self.weapon = weapons[self.weapon_type]
-		self.name = weapons[self.weapon_type]["Name"]
-		self.uses_left = weapons[self.weapon_type]["Uses left"]
+		self.weapon = self.weapons[self.weapon_type]
+		self.name = self.weapons[self.weapon_type]["Name"]
+		self.uses_left = self.weapons[self.weapon_type]["Uses left"]
 
 		
 	def attack(self):
@@ -45,7 +45,7 @@ class Weapon(Observable):
 		Returns:
 			int -- amount of damage done by weapon
 		"""
-		return self.weapons[weapon_type]["Attack"]
+		return self.weapons[self.weapon_type]["Attack"]
 
 
 	def get_type(self):

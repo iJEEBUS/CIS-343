@@ -41,7 +41,6 @@ class Player(object):
 		"""
 		return self.HP
 
-
 	def getAttack(self):
 		"""
 		Returns the damage done per attack performed by the player.
@@ -59,6 +58,9 @@ class Player(object):
 		"""
 		return self.current_weapon
 
+	def  setCurrentWeapon(self, index):
+		self.current_weapon = self.inventory[index]
+
 
 	def getInventory(self):
 		"""
@@ -73,6 +75,16 @@ class Player(object):
 		List all of the weapons in the player's inventory by their 
 		English name.
 		"""
+		counter = 0
 		for w in self.inventory:
-			print(w.get_name())
+			print("(%s) %s " % (counter, w.get_name()))
+			counter += 1
+		print('\n')
+
+	def showStatistics(self):
+		print("\nPlayer stats:")
+		print("Health: %s" % self.getHP())
+		print("Attack value: %s" % self.getAttack())
+		print("Current Weapon: %s (%s, %s)" % (self.getCurrentWeapon().get_name(), self.getCurrentWeapon().attack(), self.getCurrentWeapon().get_uses_left()))
+
 	

@@ -60,12 +60,14 @@ class Neighborhood(Observer):
 		for row in range(0, self.rows):
 			for col in range(0,self.cols):
 				if(type(self.neighborhood[row][col]) == Player):
-					print('*', end=" ")
-				elif (self.neighborhood[row][col].numMonsters() > 0):
+					print("\x1b[37m\u2588", end=" ")
+					#print('*', end=" ")
+				else:
+				#elif (self.neighborhood[row][col].numMonsters() > 0):
 					print(self.neighborhood[row][col].numMonsters(), end=" ")
 					
-				else:
-					print("\x1b[37m\u2588", end=" ")
+				#else:
+				#	print("\x1b[37m\u2588", end=" ")
 				#print("\x1b[37m\u2588", end=" ")
 			print('\n')
 

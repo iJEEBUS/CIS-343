@@ -45,7 +45,7 @@ class Zork(object):
 		print("\n\n========================================================= Manual =========================================================")
 		print("* = player location")
 		print("#'s show how many monsters are in each house")
-		print("W - up, S - down, A - left, D - right")
+		print("W -> up, S -> down, A -> left, D -> right, list -> show all weapons")
 		print("Enter 'exit' or 'quit' to exit the game...enjoy!\n")
 
 	def automateGame(self):
@@ -57,22 +57,32 @@ class Zork(object):
 
 	def playGame(self):
 		self.printDirections()
+		self.n.showNeighborhood()
+		self.p.showStatistics()
 
 		user_input = ""
 		while user_input not in ['exit','quit']:
 			user_input = ""
-			self.n.showNeighborhood()
 			user_input = input("Enter a command: ").lower()
-			print("\nPlayer coordinates: %s, %s\n" % (self.p.getLocationX(), self.p.getLocationY()))
 
 			if user_input in ['nuke', 'bomb']:
 				self.n.nuke()
 				quit()
 
+			if user_input in ['list', 'weapons']:
+				self.p.listInventory()
+
+			if user_input in ['0','1','2','3','4','5','6','7','8','9']:
+				self.p.setCurrentWeapon(int(user_input))
+				self.n.showNeighborhood()
+				self.p.showStatistics()
+
 			if user_input == 'w':
 				if (self.p.getLocationY()-1) >= 0:
 					self.n.update(0, -1)
 					self.p.setLocationY(self.p.getLocationY()-1)
+					self.n.showNeighborhood()
+					self.p.showStatistics()
 
 					## Implement fighting logic
 
@@ -81,6 +91,8 @@ class Zork(object):
 				if (self.p.getLocationY()+1) <= self.rows:
 					self.n.update(0, 1)
 					self.p.setLocationY(self.p.getLocationY()+1)
+					self.n.showNeighborhood()
+					self.p.showStatistics()
 
 					## Implement fighting logic
 
@@ -89,6 +101,8 @@ class Zork(object):
 				if (self.p.getLocationX()-1) >= 0:
 					self.n.update(-1,0)
 					self.p.setLocationX(self.p.getLocationX()-1)
+					self.n.showNeighborhood()
+					self.p.showStatistics()
 
 					## Implement fighting logic
 
@@ -97,6 +111,8 @@ class Zork(object):
 				if (self.p.getLocationX()+1) <= self.cols:
 					self.n.update(1,0)
 					self.p.setLocationX(self.p.getLocationX()+1)
+					self.n.showNeighborhood()
+					self.p.showStatistics()
 
 					## Implement fighting logic
 
@@ -130,4 +146,3 @@ class Zork(object):
 
 p = Zork()
 p.game()
-
