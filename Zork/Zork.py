@@ -57,14 +57,11 @@ class Zork(object):
 	def automateGame(self):
 		self.n.showNeighborhood()
 
-
-
-
-
 	def playGame(self):
 		self.printDirections()
 		self.n.showNeighborhood()
-		self.p.showStatistics()
+		self.p.showPlayerStatistics()
+		self.n.showNeighborhoodStatistics()
 
 		user_input = ""
 		while user_input not in ['exit','quit']:
@@ -82,20 +79,23 @@ class Zork(object):
 			if user_input in ['0','1','2','3','4','5','6','7','8','9']:
 				self.p.setCurrentWeapon(int(user_input))
 				self.n.showNeighborhood()
-				self.p.showStatistics()
+				self.p.showPlayerStatistics()
+				self.n.showNeighborhoodStatistics()
 
 			if user_input == "map":
 				self.n.showNeighborhood()
 
 			if user_input in ["stats", "statistics"]:
-				self.p.showStatistics()
+				self.p.showPlayerStatistics()
+				self.n.showNeighborhoodStatistics()
 
 			if user_input == 'w':
 				if (self.p.getLocationY()-1) >= 0:
 					self.n.update(0, -1)
 					self.p.setLocationY(self.p.getLocationY()-1)
 				self.n.showNeighborhood()
-				self.p.showStatistics()
+				self.p.showPlayerStatistics()
+				self.n.showNeighborhoodStatistics()
 
 					## Implement fighting logic
 
@@ -105,7 +105,8 @@ class Zork(object):
 					self.n.update(0, 1)
 					self.p.setLocationY(self.p.getLocationY()+1)
 				self.n.showNeighborhood()
-				self.p.showStatistics()
+				self.p.showPlayerStatistics()
+				self.n.showNeighborhoodStatistics()
 
 					## Implement fighting logic
 
@@ -115,7 +116,8 @@ class Zork(object):
 					self.n.update(-1,0)
 					self.p.setLocationX(self.p.getLocationX()-1)
 				self.n.showNeighborhood()
-				self.p.showStatistics()
+				self.p.showPlayerStatistics()
+				self.n.showNeighborhoodStatistics()
 
 					## Implement fighting logic
 
@@ -125,12 +127,14 @@ class Zork(object):
 					self.n.update(1,0)
 					self.p.setLocationX(self.p.getLocationX()+1)
 				self.n.showNeighborhood()
-				self.p.showStatistics()
+				self.p.showPlayerStatistics()
+				self.n.showNeighborhoodStatistics()
 
 					## Implement fighting logic
 			else:
 				self.n.showNeighborhood()
-				self.p.showStatistics()
+				self.p.showPlayerStatistics()
+				self.n.showNeighborhoodStatistics()
 
 
 

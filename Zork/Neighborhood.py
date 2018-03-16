@@ -46,12 +46,23 @@ class Neighborhood(Observer):
 		x, y = self.player.getLocationX(), self.player.getLocationY() 
 		self.neighborhood[y][x] = House(0)
 		self.neighborhood[y + delta_y][x + delta_x] = self.player
-		if (self.neighborhood[y + delta_y][x + delta_x].numMonsters() > 0):
-			
+		if (type(self.neighborhood[y + delta_y][x + delta_x]) != Player):
+			if (self.neighborhood[y + delta_y][x + delta_x].numMonsters() > 0):
+				#self.player.attack()
+				pass
+				# combat goes here
 
 
+	def showNeighborhoodStatistics(self):
+		print("%s monsters remain" % self.monstersLeft())
 
-
+	def monstersLeft(self):
+		total = 0
+		for row in range(0, self.rows):
+			for col in range(0,self.cols):
+				if (type(self.neighborhood[row][col]) != Player):
+					total += self.neighborhood[row][col].numMonsters()
+		return total
 
 
 	def showNeighborhood(self):

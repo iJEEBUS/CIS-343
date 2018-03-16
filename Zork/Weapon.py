@@ -48,7 +48,7 @@ class Weapon(Observable):
 		return self.weapons[self.weapon_type]["Attack"]
 
 
-	def get_type(self):
+	def getType(self):
 		"""
 		Returns the type of the current weapon.
 		Returns:
@@ -57,7 +57,7 @@ class Weapon(Observable):
 		return self.weapon_type
 
 
-	def get_uses_left(self):
+	def getUsesLeft(self):
 		"""
 		Returns how many uses the current weapon has left.
 		Returns:
@@ -66,7 +66,7 @@ class Weapon(Observable):
 		return self.uses_left
 
 
-	def get_name(self):
+	def getName(self):
 		"""
 		Returns the name of the current weapon.
 		Returns:

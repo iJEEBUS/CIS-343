@@ -48,6 +48,9 @@ class Player(object):
 		"""
 		return self.attack
 
+	def attack(self):
+		self.current_weapon
+
 
 	def getCurrentWeapon(self):
 		"""
@@ -76,14 +79,14 @@ class Player(object):
 		"""
 		counter = 0
 		for w in self.inventory:
-			print("(%s) %s " % (counter, w.get_name()))
+			print("(%s) %s " % (counter, w.getName()))
 			counter += 1
 		print('\n')
 
-	def showStatistics(self):
+	def showPlayerStatistics(self):
 		print("\nPlayer stats:")
 		print("Health: %s" % self.getHP())
 		print("Attack value: %s" % self.getAttack())
-		print("Current Weapon: %s (%s, %s)\n\n" % (self.getCurrentWeapon().get_name(), self.getCurrentWeapon().attack(), self.getCurrentWeapon().get_uses_left()))
+		print("Current Weapon: %s (%s, %s)\n\n" % (self.getCurrentWeapon().getName(), self.getCurrentWeapon().attack(), self.getCurrentWeapon().getUsesLeft()))
 
 	
