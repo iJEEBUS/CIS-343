@@ -10,6 +10,10 @@ class Observable(object):
 	def clear_observers(self):
 		if self.observers:
 			self.observers = []
-	def update(self, obj):
+	def update_observable(self, obj):
 		for observer in self.observers:
 			observer.update(obj)
+	def remove_observers(self):
+		if self.observers:
+			for x in self.observers:
+				self.observers.remove(x)

@@ -136,14 +136,6 @@ class Zork(object):
 				self.p.showPlayerStatistics()
 				self.n.showNeighborhoodStatistics()
 
-
-
-
-
-
-
-
-
 	def game(self):
 		print("\x1b[37m")
 		print("\nzorKK")
