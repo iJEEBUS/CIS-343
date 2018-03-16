@@ -46,6 +46,8 @@ class Neighborhood(Observer):
 		x, y = self.player.getLocationX(), self.player.getLocationY() 
 		self.neighborhood[y][x] = House(0)
 		self.neighborhood[y + delta_y][x + delta_x] = self.player
+		if (self.neighborhood[y + delta_y][x + delta_x].numMonsters() > 0):
+			
 
 
 
@@ -69,7 +71,7 @@ class Neighborhood(Observer):
 				#else:
 				#	print("\x1b[37m\u2588", end=" ")
 				#print("\x1b[37m\u2588", end=" ")
-			print('\n')
+			print('\n\n')
 
 
 

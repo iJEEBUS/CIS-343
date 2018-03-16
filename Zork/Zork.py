@@ -35,7 +35,7 @@ class Zork(object):
 			self.promptForCols()
 
 	def printDirections(self):
-		print("========================================================= zorKK! =========================================================")
+		print("\n\n\n\n========================================================= zorKK! =========================================================")
 		print("It seemed like a normal Halloween Eve.")
 		print("You bought a lot of candy, ate a lot of candy, and went to bed early.")
 		print("You had a lot trick-or-treating to do the next day.\n")
@@ -43,10 +43,16 @@ class Zork(object):
 		print("Batches of bad candy had transformed your friends and neighbors into all sorts of crazy monsters.")
 		print("Somehow you missed the tainted candy; it is therefore up to you to save your neighborhood and turn everyone back to normal.")
 		print("\n\n========================================================= Manual =========================================================")
-		print("* = player location")
-		print("#'s show how many monsters are in each house")
-		print("W -> up, S -> down, A -> left, D -> right, list -> show all weapons")
-		print("Enter 'exit' or 'quit' to exit the game...enjoy!\n")
+		print("\u2588 = player location")
+		print("#'s -> how many monsters are in each house")
+		print("W -> up")
+		print("S -> down")
+		print("A -> left")
+		print("D -> right")
+		print("list -> show all weapons")
+		print("map -> show the map of the neighborhood")
+		print("stats -> display player statistics")
+		print("\'exit\' or \'quit\' -> exit game\n\n\n\n")
 
 	def automateGame(self):
 		self.n.showNeighborhood()
@@ -64,6 +70,7 @@ class Zork(object):
 		while user_input not in ['exit','quit']:
 			user_input = ""
 			user_input = input("Enter a command: ").lower()
+			print('\n')
 
 			if user_input in ['nuke', 'bomb']:
 				self.n.nuke()
@@ -77,22 +84,28 @@ class Zork(object):
 				self.n.showNeighborhood()
 				self.p.showStatistics()
 
+			if user_input == "map":
+				self.n.showNeighborhood()
+
+			if user_input in ["stats", "statistics"]:
+				self.p.showStatistics()
+
 			if user_input == 'w':
 				if (self.p.getLocationY()-1) >= 0:
 					self.n.update(0, -1)
 					self.p.setLocationY(self.p.getLocationY()-1)
-					self.n.showNeighborhood()
-					self.p.showStatistics()
+				self.n.showNeighborhood()
+				self.p.showStatistics()
 
 					## Implement fighting logic
 
 
 			if user_input == 's':
-				if (self.p.getLocationY()+1) <= self.rows:
+				if (self.p.getLocationY()+1) < self.rows:
 					self.n.update(0, 1)
 					self.p.setLocationY(self.p.getLocationY()+1)
-					self.n.showNeighborhood()
-					self.p.showStatistics()
+				self.n.showNeighborhood()
+				self.p.showStatistics()
 
 					## Implement fighting logic
 
@@ -101,20 +114,24 @@ class Zork(object):
 				if (self.p.getLocationX()-1) >= 0:
 					self.n.update(-1,0)
 					self.p.setLocationX(self.p.getLocationX()-1)
-					self.n.showNeighborhood()
-					self.p.showStatistics()
+				self.n.showNeighborhood()
+				self.p.showStatistics()
 
 					## Implement fighting logic
 
 
 			if user_input == 'd':
-				if (self.p.getLocationX()+1) <= self.cols:
+				if (self.p.getLocationX()+1) < self.cols:
 					self.n.update(1,0)
 					self.p.setLocationX(self.p.getLocationX()+1)
-					self.n.showNeighborhood()
-					self.p.showStatistics()
+				self.n.showNeighborhood()
+				self.p.showStatistics()
 
 					## Implement fighting logic
+			else:
+				self.n.showNeighborhood()
+				self.p.showStatistics()
+
 
 
 
@@ -124,6 +141,7 @@ class Zork(object):
 
 
 	def game(self):
+		print("\x1b[37m")
 		print("\nzorKK")
 		self.play_style = self.promptForPlayStyle()
 		print('\n')

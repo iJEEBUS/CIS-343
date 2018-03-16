@@ -20,7 +20,6 @@ class Player(object):
 		self.loc_x = 0
 		self.loc_y = 0
 
-
 	def setLocationX(self, x):
 		self.loc_x = x
 
@@ -85,6 +84,6 @@ class Player(object):
 		print("\nPlayer stats:")
 		print("Health: %s" % self.getHP())
 		print("Attack value: %s" % self.getAttack())
-		print("Current Weapon: %s (%s, %s)" % (self.getCurrentWeapon().get_name(), self.getCurrentWeapon().attack(), self.getCurrentWeapon().get_uses_left()))
+		print("Current Weapon: %s (%s, %s)\n\n" % (self.getCurrentWeapon().get_name(), self.getCurrentWeapon().attack(), self.getCurrentWeapon().get_uses_left()))
 
 	
