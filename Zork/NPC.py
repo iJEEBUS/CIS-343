@@ -20,7 +20,7 @@ class NPC(Observable):
 				self.update_observable() # updates the house on the death
 				self.remove_observers() # removes everything watching this character
 
-class Player(NPC):
+class Person(NPC):
 	def __init__(self):
 		NPC.__init__(self, "Person", 100, 0, 0)
 
@@ -30,7 +30,7 @@ class Player(NPC):
 		return -3 # since a negative attack will increase the players health
 
 class Zombie(NPC):
-	def __init__(self, arg):
+	def __init__(self):
 		NPC.__init__(self, "Zombie", randint(50, 100), 0, 10)
 
 	def takeDamage(self, damage, weapon):

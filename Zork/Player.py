@@ -1,36 +1,22 @@
-from Weapon import Weapon
+from Weapon import HersheyKiss, SourStraw, ChocolateBar, NerdBomb
 from random import randint
 
 class Player(object):
 	"""
 	Player class that will create a new player for the game called Zork.
 	"""
-
-
 	def __init__(self):
 		"""
 		Initial constructor the the player class. Sets the HP, attack points,
 		inventory, and current weapon for every new instance.
 		"""
-		super().__init__()
-		self.HP = randint(100,125)
-		self.attack = randint(10, 20)
-		self.inventory = [ Weapon(randint(0,3)) for y in range(10)]
-		self.current_weapon = self.inventory[0]
-		self.loc_x = 0
-		self.loc_y = 0
+		self.__HP = randint(100,125)
+		self.__attack = randint(10, 20)
+		self.__inventory = self.__fillInventory()
+		self.__current_weapon = self.__inventory[0]
 
-	def setLocationX(self, x):
-		self.loc_x = x
-
-	def setLocationY(self, y):
-		self.loc_y = y
-
-	def getLocationX(self):
-		return self.loc_x
-
-	def getLocationY(self):
-		return self.loc_y
+	def takeDamage(self, damage):
+		self.__HP -= damage
 
 	def getHP(self):
 		"""
@@ -38,19 +24,17 @@ class Player(object):
 		Returns:
 			int -- the players current healt
 		"""
-		return self.HP
+		return self.__HP
 
-	def getAttack(self):
-		"""
-		Returns the damage done per attack performed by the player.
-		Returns:
-			int -- damage done by player during attack
-		"""
-		return self.attack
+	def attackWithWeapon(self, weapon):
+		# returns the calculated attack value
+		return self.__attack * weapon.getDamageMultiplier()
 
-	def attack(self):
-		self.current_weapon
-
+	def __fillInventory(self):
+		weapon_types = [HersheyKiss(), SourStraw(), ChocolateBar(), NerdBomb()]
+		# clear inventory
+		# refill with new weapons
+		return [ weapon_types[randint(0,3)] for y in range(10) ] 
 
 	def getCurrentWeapon(self):
 		"""
@@ -58,11 +42,17 @@ class Player(object):
 		Returns:
 			int -- current weapon of the player
 		"""
-		return self.current_weapon
+		return self.__current_weapon
 
-	def  setCurrentWeapon(self, index):
-		self.current_weapon = self.inventory[index]
+	def setCurrentWeapon(self, index):
+		self.__current_weapon = self.__inventory[index]
 
+	def listInventory(self):
+		counter = 0
+		for weapon in self.__inventory:
+			print("(%s) %s - %s remaining" % (counter, weapon.getWeaponType(), weapon.getUsesLeft()))
+			counter += 1
+		print("\n")
 
 	def getInventory(self):
 		"""
@@ -70,23 +60,4 @@ class Player(object):
 		Returns:
 			list -- player weapons inventory
 		"""
-		return self.inventory
-
-	def listInventory(self):
-		"""
-		List all of the weapons in the player's inventory by their 
-		English name.
-		"""
-		counter = 0
-		for w in self.inventory:
-			print("(%s) %s " % (counter, w.getName()))
-			counter += 1
-		print('\n')
-
-	def showPlayerStatistics(self):
-		print("\nPlayer stats:")
-		print("Health: %s" % self.getHP())
-		print("Attack value: %s" % self.getAttack())
-		print("Current Weapon: %s (%s, %s)\n\n" % (self.getCurrentWeapon().getName(), self.getCurrentWeapon().attack(), self.getCurrentWeapon().getUsesLeft()))
-
-	
+		return self.__inventory

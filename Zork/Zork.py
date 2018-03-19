@@ -1,23 +1,24 @@
-from House import House
-from Monster import Monster
-from Weapon import Weapon
+from Observer import Observer
 from Player import Player
 from Neighborhood import Neighborhood
-class Zork(object):
-	def __init__(self):
-		super().__init__()
+class Zork(Observer):
+	def __init__(self, max_columns, max_rows):
+		self.__max_column = max_columns
+		self.__max_row = max_rows
+		self.__current_col = 0
+		self.__current_row = 0
+		self.__neighborhood = Neighborhood(max_columns, max_rows)
+		self.__neighborhood.add_observer(self)
+		self.__player = Player()
+		self.__playGame()
 
-	def promptForPlayStyle(self):
-		try:
-			print("\nWhich type of experience would you prefer?")
-			print("1) Automated")
-			print("2) Manual")
-			play_style = int(input(""))
-			if play_style not in [1,2]:
-				self.promptForPlayStyle()
-			return play_style
-		except Exception as e:
-			self.promptForPlayStyle()
+	def update_observer(self, obj):
+		print("%s has been transformed into a human again!" % (obj.getName()))
+		if self.__isHouseEmpty():
+			print("You have defeated all of the monsters at this house!")
+			print("The survivors provide you with more candy, which boosts your health: +10 HP")
+			self.__player.takeDamage(-10) # negatively taking damage == adding health
+
 
 	def promptForRows(self):
 		try:
@@ -54,14 +55,17 @@ class Zork(object):
 		print("stats -> display player statistics")
 		print("\'exit\' or \'quit\' -> exit game\n\n\n\n")
 
-	def automateGame(self):
-		self.n.showNeighborhood()
+	def __playGame(self):
+		print("\x1b[37m")
+		print("\nzorKK")
+		print('\n')
+		rows = self.promptForRows()
+		cols = self.promptForCols()
+		print("\n")
 
-	def playGame(self):
-		self.printDirections()
-		self.n.showNeighborhood()
-		self.p.showPlayerStatistics()
-		self.n.showNeighborhoodStatistics()
+		# create neighborhood instance
+		self.__neighborhood = Neighborhood(rows, cols)
+		self.__neighborhood.showNeighborhood()
 
 		user_input = ""
 		while user_input not in ['exit','quit']:
@@ -70,93 +74,71 @@ class Zork(object):
 			print('\n')
 
 			if user_input in ['nuke', 'bomb']:
-				self.n.nuke()
+				self.__neighborhood.nuke()
 				quit()
 
 			if user_input in ['list', 'weapons']:
-				self.p.listInventory()
+				self.__player.listInventory()
 
 			if user_input in ['0','1','2','3','4','5','6','7','8','9']:
-				self.p.setCurrentWeapon(int(user_input))
-				self.n.showNeighborhood()
-				self.p.showPlayerStatistics()
-				self.n.showNeighborhoodStatistics()
+				self.__player.setCurrentWeapon(int(user_input))
+				self.__neighborhood.showNeighborhood()
+				print("Current weapon set to %s - %s remaining" % (self.__player.getCurrentWeapon().getWeaponType(), self.__player.getCurrentWeapon().getUsesLeft()))
 
 			if user_input == "map":
-				self.n.showNeighborhood()
+				self.__neighborhood.showNeighborhood()
 
 			if user_input in ["stats", "statistics"]:
-				self.p.showPlayerStatistics()
-				self.n.showNeighborhoodStatistics()
+				self.__player.showPlayerStatistics()
+				self.__neighborhood.showNeighborhoodStatistics()
 
-			if user_input == 'w':
-				if (self.p.getLocationY()-1) >= 0:
-					self.n.update(0, -1)
-					self.p.setLocationY(self.p.getLocationY()-1)
-				self.n.showNeighborhood()
-				self.p.showPlayerStatistics()
-				self.n.showNeighborhoodStatistics()
+			if user_input == "attack": ## attack
+				if self.__isHouseEmpty() == False:
+					print("Attacking with a %s" % (self.__player.getCurrentWeapon().getWeaponType()))
+					house = self.__neighborhood.getNeighborhood()[self.__current_row][self.__current_col].getNPCs()
+					for monster in house:
+						print("Attacking %s...", (monster))
 
-					## Implement fighting logic
+					self.__player.attackWithWeapon(self.__player.getCurrentWeapon())
+					self.__player.getCurrentWeapon().decrementUsesLeft()
 
+			if user_input == 'w': # up
+				pass
 
-			if user_input == 's':
-				if (self.p.getLocationY()+1) < self.rows:
-					self.n.update(0, 1)
-					self.p.setLocationY(self.p.getLocationY()+1)
-				self.n.showNeighborhood()
-				self.p.showPlayerStatistics()
-				self.n.showNeighborhoodStatistics()
-
-					## Implement fighting logic
+			if user_input == 's': # down
+				pass
+					
 
 
-			if user_input == 'a':
-				if (self.p.getLocationX()-1) >= 0:
-					self.n.update(-1,0)
-					self.p.setLocationX(self.p.getLocationX()-1)
-				self.n.showNeighborhood()
-				self.p.showPlayerStatistics()
-				self.n.showNeighborhoodStatistics()
-
-					## Implement fighting logic
+			if user_input == 'a': # left
+				pass
+					
 
 
-			if user_input == 'd':
-				if (self.p.getLocationX()+1) < self.cols:
-					self.n.update(1,0)
-					self.p.setLocationX(self.p.getLocationX()+1)
-				self.n.showNeighborhood()
-				self.p.showPlayerStatistics()
-				self.n.showNeighborhoodStatistics()
-
-					## Implement fighting logic
+			if user_input == 'd': # right
+				pass
+					
 			else:
-				self.n.showNeighborhood()
-				self.p.showPlayerStatistics()
-				self.n.showNeighborhoodStatistics()
-
-	def game(self):
-		print("\x1b[37m")
-		print("\nzorKK")
-		self.play_style = self.promptForPlayStyle()
-		print('\n')
-		self.rows = self.promptForRows()
-		self.cols = self.promptForCols()
-		print("\n")
+				pass
+				
+				
+	def __isHouseEmpty(self):
+		if self.__neighborhood.getNumMonstersSpecificHouse(self.__current_row, self.__current_col):
+			return False
+		else:
+			return True
 
 
+	def promptForPlayStyle(self):
+		try:
+			print("\nWhich type of experience would you prefer?")
+			print("1) Automated")
+			print("2) Manual")
+			play_style = int(input(""))
+			if play_style not in [1,2]:
+				self.promptForPlayStyle()
+			return play_style
+		except Exception as e:
+			self.promptForPlayStyle()
 
-		# create a player instance
-		self.p = Player()
-		# create neighborhood instance
-		self.n = Neighborhood(self.rows,self.cols, self.p)
-		#n.showNeighborhood()
-
-		if self.play_style == 1:
-			self.automateGame()
-		if self.play_style == 2:
-			self.playGame()
-
-p = Zork()
-p.game()
+Zork(5,5)

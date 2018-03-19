@@ -1,10 +1,10 @@
 from House import House
 from Observer import Observer
-from Player import Player
+from Observable import Observable
 from random import randint
 
 
-class Neighborhood(Observer):
+class Neighborhood(Observer, Observable):
 	"""
 	The class that defines what a neighborhood is, the houses it holds, while observing
 	all of the houses.
@@ -12,8 +12,7 @@ class Neighborhood(Observer):
 	Extends:
 		Observer
 	"""
-
-	def __init__(self, rows, cols, player):
+	def __init__(self, rows, cols):
 		"""
 		Initial constructor when a new neighborhood is created.
 		
@@ -21,48 +20,48 @@ class Neighborhood(Observer):
 			rows {[int]} -- [number of rows in the neighborhood matrix]
 			cols {[int]} -- [number of columns in the neighborhood matrix]
 		"""
+		super(Neighborhood, self).__init__()
+		self.rows, self.cols = rows, cols
 
-		self.rows, self.cols, self.player = rows, cols, player
-		self.neighborhood = []
+		# adds houses to the neighborhood matrix
+		self.__neighborhood = [[House() for x in range(0, self.cols)] for y in range(0, self.rows)]
 		
-		row = 0
-
-		# appends houses to the neighborhood matrix
-		# each house contains a random number of monsters
+		# make neighborhood observe all homes
 		for row in range(0, self.rows):
-			self.neighborhood.append([])
 			for col in range(0, self.cols):
-				self.neighborhood[row].append(House(randint(0,10)))
-				self.neighborhood[row][col].add_observer(self)
-
-		# Randomly place the player on the board
-		x, y = randint(0,self.cols-1), randint(0,self.rows-1)
-		self.neighborhood[y][x] = self.player
-		self.player.setLocationX(x)
-		self.player.setLocationY(y)
+				self.__neighborhood[row][col].add_observer(self)
+		self.__total_monsters, self.__total_persons  = self.__inHouseTotals()
 
 
-	def update(self, delta_x, delta_y):
-		x, y = self.player.getLocationX(), self.player.getLocationY() 
-		self.neighborhood[y][x] = House(0)
-		self.neighborhood[y + delta_y][x + delta_x] = self.player
-		if (type(self.neighborhood[y + delta_y][x + delta_x]) != Player):
-			if (self.neighborhood[y + delta_y][x + delta_x].numMonsters() > 0):
-				#self.player.attack()
-				pass
-				# combat goes here
+	def update_observer(self, delta_x, delta_y):
+		self.__num_monsters -= 1
+		self.__num_persons += 1
+		super().update_observable(obj)
 
 
 	def showNeighborhoodStatistics(self):
 		print("%s monsters remain" % self.monstersLeft())
 
-	def monstersLeft(self):
-		total = 0
+
+	def __inHouseTotals(self):
+		total_monsters = 0
+		total_persons = 0
+
 		for row in range(0, self.rows):
 			for col in range(0,self.cols):
-				if (type(self.neighborhood[row][col]) != Player):
-					total += self.neighborhood[row][col].numMonsters()
-		return total
+				if (self.__neighborhood[row][col].getNumMonsters()):
+					total_monsters += self.__neighborhood[row][col].getNumMonsters()
+				else:
+					total_persons += self.__neighborhood[row][col].getNumPersons()
+		# returns both the total number of  monsters and people in the houses
+		return total_monsters, total_persons
+
+
+	def monstersAttack(self, row, col):
+		return self.__neighborhood[row][col].attackPlayer()
+
+	def attackHouse(self, row, col, damage, weapon):
+		self.__neighborhood[row][col].attackMonsters(damage, weapon)
 
 
 	def showNeighborhood(self):
@@ -72,25 +71,38 @@ class Neighborhood(Observer):
 		"""
 		for row in range(0, self.rows):
 			for col in range(0,self.cols):
-				if(type(self.neighborhood[row][col]) == Player):
-					print("\x1b[37m\u2588", end=" ")
+				if(type(self.__neighborhood[row][col]) == House):
+					print(self.__neighborhood[row][col].getNumMonsters(), end=" ")
 					#print('*', end=" ")
 				else:
-				#elif (self.neighborhood[row][col].numMonsters() > 0):
-					print(self.neighborhood[row][col].numMonsters(), end=" ")
+				#elif (self.__neighborhood[row][col].getNumMonsters() > 0):
+					print("\x1b[37m\u2588", end=" ")
+					
 					
 				#else:
 				#	print("\x1b[37m\u2588", end=" ")
 				#print("\x1b[37m\u2588", end=" ")
 			print('\n\n')
 
-
-
 	def nuke(self):
 		for row in range(0, self.rows):
 			for col in range(0,self.cols):
-				if(type(self.neighborhood[row][col]) == Player):
-					print('*', end=" ")
-				else:
+				if(type(self.__neighborhood[row][col]) == House):
 					print("\x1b[37m\u2588", end=" ")
+				else:
+					print('*', end=" ")
+					
 			print('\n')
+
+	def getNumMonstersSpecificHouse(self, row, col):
+		return self.__neighborhood[row][col].getNumMonsters()
+
+
+	def getNumMonsters(self):
+		return self.__num_monsters
+
+	def getNumPersons(self):
+		return self.__num_persons
+
+	def getNeighborhood(self):
+		return self.__neighborhood
