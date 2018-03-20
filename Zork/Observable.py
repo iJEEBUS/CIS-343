@@ -18,3 +18,7 @@ class Observable(object):
 	def update_observable(self, obj):
 		for observer in self.observers:
 			observer.update_observer(obj)
+
+	def show_observers(self):
+		for o in self.observers:
+			print(o)

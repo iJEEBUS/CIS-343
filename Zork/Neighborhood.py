@@ -20,8 +20,8 @@ class Neighborhood(Observer, Observable):
 
 
 	def update_observer(self, obj):
-		self.__num_monsters -= 1
-		self.__num_persons += 1
+		self.__total_monsters -= 1
+		self.__total_persons += 1
 		super().update_observable(obj) # update the game
 
 
@@ -47,8 +47,7 @@ class Neighborhood(Observer, Observable):
 		return self.__neighborhood[row][col].attackPlayer()
 
 	def attackHouse(self, row, col, damage, weapon):
-		if self.__neighborhood[row][col].getNumMonsters() > 0:
-			self.__neighborhood[row][col].attackMonsters(damage, weapon)
+		self.__neighborhood[row][col].attackMonsters(damage, weapon)
 
 
 	def showNeighborhood(self, current_row, current_col):

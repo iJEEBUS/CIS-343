@@ -15,7 +15,7 @@ class Zork(Observer):
 
 	def update_observer(self, obj):
 		print("%s has been transformed into a human again!" % (obj.getName()))
-		if self.__isHouseEmpty():
+		if self.__containsMonsters() == False:
 			print("You have defeated all of the monsters at this house!")
 			print("The survivors provide you with more candy, which boosts your health: +10 HP")
 			self.__player.takeDamage(-10) # negatively taking damage == adding health
@@ -112,7 +112,7 @@ class Zork(Observer):
 				weapon = self.__player.getCurrentWeapon()
 
 				# if the house contains monsters then continue with attack
-				if self.__isHouseEmpty() == False:
+				if self.__containsMonsters():
 
 					# if the weapon has uses left then continue attacking
 					if weapon.getUsesLeft() > 0:
@@ -124,7 +124,6 @@ class Zork(Observer):
 						# How much damage is going to be done
 						damage = self.__player.attackWithWeapon(self.__player.getCurrentWeapon())
 						self.__neighborhood.attackHouse(self.__current_row, self.__current_col, damage, weapon)
-						weapon.decrementUsesLeft()
 					else:
 						print("You do not have any more %ss left!" % (str(weapon)[str(weapon).index(".")+1:str(weapon).index(" ")]))
 				else:
@@ -161,10 +160,10 @@ class Zork(Observer):
 					print("You cannot escape your own neighborhood!!!")
 				
 				
-	def __isHouseEmpty(self):
-		if self.__neighborhood.getNumMonstersSpecificHouse(self.__current_row, self.__current_col):
-			return False
-		else:
+	def __containsMonsters(self):
+		if self.__neighborhood.getNumMonstersSpecificHouse(self.__current_row, self.__current_col) > 0:
 			return True
+		else:
+			return False
 
 Zork(5,5)

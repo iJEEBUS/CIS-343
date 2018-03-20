@@ -42,6 +42,7 @@ class Zombie(NPC):
 				print("%s took %s damage" % (self._name, damage))
 			if self._HP <= 0: # removes any observers if the NPC dies
 				print("Zombie has died!")
+				self.show_observers()
 				self.update_observable(self) # updates the house on the death
 				self.clear_observers() # removes everything watching this character
 		else:

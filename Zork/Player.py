@@ -29,7 +29,7 @@ class Player(Observer):
 
 	def attackWithWeapon(self, weapon):
 		# returns the calculated attack value
-		return self.__attack * weapon.getDamageMultiplier()
+		return self.__attack * weapon.useWeapon()
 
 	def __fillInventory(self):
 		# clear inventory

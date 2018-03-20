@@ -22,7 +22,6 @@ class House(Observer, Observable):
 	def attackMonsters(self, damage, weapon):
 		# damages all of the monsters in the house
 		if self.__num_monsters > 0:
-			weapon.
 			for monsters in self.__NPCs:
 				monsters.takeDamage(damage, weapon)
 		else:
@@ -50,7 +49,7 @@ class House(Observer, Observable):
 				self.__NPCs.append(vampire)
 				vampire.add_observer(self)
 				self.__num_monsters += 1
-			elif NPC_type == 3: # Ghoul, Werewolf
+			elif NPC_type == 3: # Ghoul
 				ghoul = Ghoul()
 				self.__NPCs.append(ghoul)
 				ghoul.add_observer(self)
@@ -61,11 +60,11 @@ class House(Observer, Observable):
 				werewolf.add_observer(self)
 				self.__num_monsters += 1
 
-	def upate_observer(self, obj):
+	def update_observer(self, obj):
 		# get rid of a monster, update neighborhood of change
 		self.__num_monsters -= 1
 		self.__NPCs.remove(obj)
-		super.update_observable(obj)
+		super().update_observable(obj)
 
 		# add a person
 		self.__num_persons += 1

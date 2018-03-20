@@ -9,10 +9,8 @@ class Weapon(Observable):
 		self.__max_uses = max_uses
 		self.__uses_left = max_uses
 
-	def decrementUsesLeft(self):
+	def useWeapon(self):
 		self.__uses_left -= 1
-
-	def getDamageMultiplier(self):
 		return uniform(self.__min_modifier, self.__max_modifer)
 
 	def getUsesLeft(self):
