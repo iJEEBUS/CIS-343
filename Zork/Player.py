@@ -18,7 +18,6 @@ class Player(Observer):
 
 	def takeDamage(self, damage):
 		self.__HP -= damage
-			
 
 	def getHP(self):
 		return self.__HP

@@ -11,7 +11,7 @@ class Zork(Observer):
 		self.__neighborhood = Neighborhood(max_columns, max_rows)
 		self.__neighborhood.add_observer(self)
 		self.__player = Player()
-		self.__playGame()
+		self.__playGame(self.__max_column, self.__max_row)
 
 
 	def playAgain(self):
@@ -64,12 +64,12 @@ class Zork(Observer):
 		print("stats -> display player statistics")
 		print("\'exit\' or \'quit\' -> exit game\n\n\n\n")
 
-	def __playGame(self):
+	def __playGame(self, max_columns, max_rows):
 		print("\x1b[37m")
 		print("\nzorKK")
 		print('\n')
-		rows = 5#self.promptForRows()
-		cols = 5#self.promptForCols()
+		rows = max_rows#self.promptForRows()
+		cols = max_columns#self.promptForCols()
 		print("\n")
 
 		# create neighborhood instance
@@ -84,6 +84,7 @@ class Zork(Observer):
 			print('\n')
 
 			self.__player.showPlayerStatistics()
+			print("Monsters remaining: %s" % (self.__neighborhood.getTotalMonsters()))
 			user_input = ""
 			user_input = input("Enter a command: ").lower()
 			print('\n')
@@ -149,6 +150,14 @@ class Zork(Observer):
 						if self.__player.getHP() <= 0:
 							print("You have fought valiantly, but you have failed your quest to save your family and friends. Shame.")
 							self.playAgain()
+
+						# checks if there are any more monsters alive
+						if self.__neighborhood.getTotalMonsters() <= 0:
+							print("You have won the game! Congrats!")
+							self.playAgain()
+
+
+
 					else:
 						print("You do not have any more %ss left!" % (str(weapon)[str(weapon).index(".")+1:str(weapon).index(" ")]))
 				else:
@@ -194,7 +203,5 @@ class Zork(Observer):
 			return True
 		else:
 			return False
-
-	
 
 Zork(5,5)

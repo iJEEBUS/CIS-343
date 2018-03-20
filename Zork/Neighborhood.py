@@ -2,6 +2,7 @@ from House import House
 from Observer import Observer # observes the houses
 from Observable import Observable # observed by the Zork game
 from random import randint
+import time
 
 
 class Neighborhood(Observer, Observable):
@@ -73,24 +74,35 @@ class Neighborhood(Observer, Observable):
 			print('\x1b[37m\n\n')
 
 	def nuke(self):
+		print("\x1b[33mScrambling around the house you find what seems to be a detonator.")
+		print("Even though the outcome is uncertain, you flip the switch and attempt to escape your neighborhood by foot.")
+		print("Shortly after reaching the highway overlooking your hometown you begin to hear sirens:\n")
+		time.sleep(5)
+		print("☢ ☢ ☢ ☢ ☢ ☢ ☢ ☢ ☢ ☢ TACTICAL NUKE INBOUND ☢ ☢ ☢ ☢ ☢ ☢ ☢ ☢ ☢ ☢\n")
+		time.sleep(1)
+
+		count = 5
+		for x in range(5):
+			print("%s..." % (count))
+			count -= 1
+			time.sleep(1)
+		print("\nYou see a great flash as an intense heat incinerates every living, and un-living, organism in the area.")	
+		print("What used to be your home has transformed into an urban cemetery it impossible to search for survivors.")
+		print("Great job...you played yourself.\n")
 		for row in range(0, self.rows):
 			for col in range(0,self.cols):
-				if(type(self.__neighborhood[row][col]) == House):
-					print("\x1b[37m\u2588", end=" ")
-				else:
-					print('*', end=" ")
-					
+					print("\x1b[33m\u2588 0m / 0p \x1b[33m\u2588", end=" ")
 			print('\n')
 
 	def getNumMonstersSpecificHouse(self, row, col):
 		return self.__neighborhood[row][col].getNumMonsters()
 
 
-	def getNumMonsters(self):
-		return self.__num_monsters
+	def getTotalMonsters(self):
+		return self.__total_monsters
 
-	def getNumPersons(self):
-		return self.__num_persons
+	def getTotalPersons(self):
+		return self.__total_persons
 
 	def getNeighborhood(self):
 		return self.__neighborhood
