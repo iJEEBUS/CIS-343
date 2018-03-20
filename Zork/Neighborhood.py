@@ -26,7 +26,7 @@ class Neighborhood(Observer, Observable):
 
 
 	def showNeighborhoodStatistics(self):
-		print("%s monsters remain" % self.monstersLeft())
+		print("%s monsters remain" % getNumMonsters())
 
 
 	def __inHouseTotals(self):
@@ -43,8 +43,10 @@ class Neighborhood(Observer, Observable):
 		return total_monsters, total_persons
 
 
-	def monstersAttack(self, row, col):
-		return self.__neighborhood[row][col].attackPlayer()
+	def monstersAttack(self):
+		damage = self.__neighborhood.attackPlayer(self.__current_row, self.__current_col)
+		self.__player.takeDamage(damage)
+		return damage
 
 	def attackHouse(self, row, col, damage, weapon):
 		self.__neighborhood[row][col].attackMonsters(damage, weapon)
@@ -55,12 +57,20 @@ class Neighborhood(Observer, Observable):
 			for col in range(0,self.cols):
 				if(row == current_row):
 					if (col == current_col):
-						print("\x1b[37m\u2588", end=" ")
+						print("\x1b[31m\u2588 %sm / %sp \x1b[31m\u2588" % (self.__neighborhood[row][col].getNumMonsters(), self.__neighborhood[row][col].getNumPersons()), end=" ")
+						#print("| \x1b[37m\u2588 / \x1b[37m\u2588 | ", end=" ")
 					else:
-						print(self.__neighborhood[row][col].getNumMonsters(), end=" ")
+						if self.__neighborhood[row][col].getNumMonsters() > 0:
+							print("\x1b[37m\u2588 %sm / %sp \x1b[37m\u2588" % (self.__neighborhood[row][col].getNumMonsters(), self.__neighborhood[row][col].getNumPersons()), end=" ")
+						else:
+							print("\x1b[32m\u2588 %sm / %sp \x1b[32m\u2588" % (self.__neighborhood[row][col].getNumMonsters(), self.__neighborhood[row][col].getNumPersons()), end=" ")
 				else:
-					print(self.__neighborhood[row][col].getNumMonsters(), end=" ")
-			print('\n\n')
+					if self.__neighborhood[row][col].getNumMonsters() > 0:
+						print("\x1b[37m\u2588 %sm / %sp \x1b[37m\u2588" % (self.__neighborhood[row][col].getNumMonsters(), self.__neighborhood[row][col].getNumPersons()), end=" ")
+					else:
+						print("\x1b[32m\u2588 %sm / %sp \x1b[32m\u2588" % (self.__neighborhood[row][col].getNumMonsters(), self.__neighborhood[row][col].getNumPersons()), end=" ")
+				
+			print('\x1b[37m\n\n')
 
 	def nuke(self):
 		for row in range(0, self.rows):

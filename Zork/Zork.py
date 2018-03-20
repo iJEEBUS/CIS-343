@@ -13,6 +13,15 @@ class Zork(Observer):
 		self.__player = Player()
 		self.__playGame()
 
+
+	def playAgain(self):
+		response = input("Would you like to play again? ").lower()
+		if response == "yes":
+			Zork(5,5)
+		else:
+			print("LOL loser")
+			quit()
+
 	def update_observer(self, obj):
 		print("%s has been transformed into a human again!" % (obj.getName()))
 		if self.__containsMonsters() == False:
@@ -59,18 +68,22 @@ class Zork(Observer):
 		print("\x1b[37m")
 		print("\nzorKK")
 		print('\n')
-		rows = self.promptForRows()
-		cols = self.promptForCols()
+		rows = 5#self.promptForRows()
+		cols = 5#self.promptForCols()
 		print("\n")
 
 		# create neighborhood instance
 		self.__neighborhood = Neighborhood(rows, cols)
-		self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+		#self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
 
 		user_input = ""
 
 		# only exits when the user types 'exit' or 'quit'
-		while user_input not in ['exit','quit']:
+		while user_input not in ['exit','quit'] :
+			self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+			print('\n')
+
+			self.__player.showPlayerStatistics()
 			user_input = ""
 			user_input = input("Enter a command: ").lower()
 			print('\n')
@@ -92,8 +105,9 @@ class Zork(Observer):
 				print("Current weapon set to %s - %s remaining" % (self.__player.getCurrentWeapon().getWeaponType(), self.__player.getCurrentWeapon().getUsesLeft()))
 
 			# displays the map for the use
-			if user_input == "map":
-				self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+			#if user_input == "map":
+			#	self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+			#	print('\n')
 
 
 			# THIS IS EXTRA
@@ -124,40 +138,55 @@ class Zork(Observer):
 						# How much damage is going to be done
 						damage = self.__player.attackWithWeapon(self.__player.getCurrentWeapon())
 						self.__neighborhood.attackHouse(self.__current_row, self.__current_col, damage, weapon)
+
+						# enemies attack right after you attack
+						monster_attack = self.__neighborhood.getNeighborhood()[self.__current_row][self.__current_col].attackPlayer()
+						self.__player.takeDamage(monster_attack)
+
+						# if the players health decreases to 0 
+						# then display ending message and ask user 
+						# if they wish to play again
+						if self.__player.getHP() <= 0:
+							print("You have fought valiantly, but you have failed your quest to save your family and friends. Shame.")
+							self.playAgain()
 					else:
 						print("You do not have any more %ss left!" % (str(weapon)[str(weapon).index(".")+1:str(weapon).index(" ")]))
 				else:
 					print("This house contains no monsters!")
 
-
 			# Controls the users movement throughout the game
 			if user_input == 'd': # right
-				if self.__current_col + 1 < self.__max_column:
+				if self.__current_col + 1 <= self.__max_column - 1:
 					self.__current_col += 1
-					self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+					#self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
 				else:
-					print("You cannot escape your own neighborhood!!!")
+					print("You cannot escape your own neighborhood!! Turn around and save your friends!\n")
 
 			if user_input == 'a': # left
 				if self.__current_col - 1 >= 0:
 					self.__current_col -= 1
-					self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+					#self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
 				else:
-					print("You cannot escape your own neighborhood!!!")
+					print("You cannot escape your own neighborhood!! Turn around and save your friends!\n")
 
 			if user_input == 'w': # up
 				if self.__current_row - 1 >= 0:
 					self.__current_row -= 1
-					self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+					#self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
 				else:
-					print("You cannot escape your own neighborhood!!!")
+					print("You cannot escape your own neighborhood!! Turn around and save your friends!\n")
 
 			if user_input == 's': # down
-				if self.__current_row + 1 < self.__max_row:
+				if self.__current_row + 1 <= self.__max_row - 1:
 					self.__current_row += 1
-					self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+					#self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
 				else:
-					print("You cannot escape your own neighborhood!!!")
+					print("You cannot escape your own neighborhood!! Turn around and save your friends!\n")
+
+			# see how many monsters are alive on the board
+			# if it is zero then display win screen and exit
+			#if self.__neighborhood.getNumMonsters() == 0:
+			#	print("You have cleared the entire neighborhood!")
 				
 				
 	def __containsMonsters(self):
@@ -165,5 +194,7 @@ class Zork(Observer):
 			return True
 		else:
 			return False
+
+	
 
 Zork(5,5)

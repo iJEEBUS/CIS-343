@@ -14,7 +14,7 @@ class House(Observer, Observable):
 
 	def attackPlayer(self):
 		# calculates and returns the damage to be done to the player
-		total_damage += 0
+		total_damage = 0
 		for monsters in self.__NPCs:
 			total_damage += monsters.attack()
 		return total_damage

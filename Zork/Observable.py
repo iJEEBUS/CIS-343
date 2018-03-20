@@ -19,6 +19,7 @@ class Observable(object):
 		for observer in self.observers:
 			observer.update_observer(obj)
 
+	# used for debugging purposes
 	def show_observers(self):
 		for o in self.observers:
 			print(o)

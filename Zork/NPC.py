@@ -9,12 +9,22 @@ class NPC(Observable):
 		self.__min_attack = min_attack
 		self.__max_attack = max_attack
 
-		def takeDamage(self, damage, weapon):
-			raise NotImplementedError
-		def attack(self):
-			return randint(self.__min_attack, self.__max_attack)
-		def getName(self):
-			return self.__name
+	def takeDamage(self, damage, weapon):
+		raise NotImplementedError
+
+	def attack(self):
+		damage = randint(self.__min_attack, self.__max_attack)
+		print("%s attacks you for %s damage" % (self._name, damage))
+		return damage
+
+	def getMinAttack(self):
+		return self.__min_attack
+
+	def getMaxAttack(self):
+		return self.__max_attack
+
+	def getName(self):
+		return self._name
 
 class Person(NPC):
 	def __init__(self):
@@ -22,6 +32,7 @@ class Person(NPC):
 
 	def takeDamage(self, damage, weapon):
 		pass
+
 	def attack(self):
 		return -3 # since a negative attack will increase the players health
 
@@ -42,11 +53,30 @@ class Zombie(NPC):
 				print("%s took %s damage" % (self._name, damage))
 			if self._HP <= 0: # removes any observers if the NPC dies
 				print("Zombie has died!")
-				self.show_observers()
 				self.update_observable(self) # updates the house on the death
 				self.clear_observers() # removes everything watching this character
 		else:
 			pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Vampire(NPC):
 	def __init__(self):
@@ -56,7 +86,6 @@ class Vampire(NPC):
 		if weapon != "Chocolate Bar":
 			self._HP -= damage
 			print("%s took %s damage" % (self._name, damage))
-			#self.__checkIfAlive()
 		else:
 			print("The %s seems to actually enjoy the %s -_-" % (self._name, weapon))
 
@@ -72,7 +101,6 @@ class Ghoul(NPC):
 		else:
 			self._HP -= damage
 			print("%s took %s damage" % (self._name, damage))
-		#self.__checkIfAlive()
 
 class Werewolf(NPC):
 	def __init__(self):
@@ -86,11 +114,3 @@ class Werewolf(NPC):
 	 	else:
 	 		self._HP -= damage
 	 		print("%s took %s damage" % (self._name, damage))
-	 		#self.__checkIfAlive()
-		
-		
-		
-
-		
-
-
