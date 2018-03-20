@@ -1,11 +1,11 @@
-from Observer import Observer
-from Observable import Observable
+from Observer import Observer # observes the monsters
+from Observable import Observable # observed by the neighborhood
 from NPC import Person, Zombie, Vampire, Ghoul, Werewolf
 from random import randint
 
 class House(Observer, Observable):
 	def __init__(self):
-		super(House, self). __init__() # pass self to the Observable constructor
+		super(House, self).__init__() # pass self to the Observable constructor
 		self.__num_monsters = 0
 		self.__num_persons = 0
 		self.__NPCs = []
@@ -21,8 +21,12 @@ class House(Observer, Observable):
 
 	def attackMonsters(self, damage, weapon):
 		# damages all of the monsters in the house
-		for monsters in self.__NPCs:
-			monsters.takeDamage(damage, weapon)
+		if self.__num_monsters > 0:
+			weapon.
+			for monsters in self.__NPCs:
+				monsters.takeDamage(damage, weapon)
+		else:
+			print("There are no monsters left in this house!")
 
 	# Go through and create random NPCs for the house.
 	# Add the house as an observer of each one added.

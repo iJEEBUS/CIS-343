@@ -65,49 +65,61 @@ class Zork(Observer):
 
 		# create neighborhood instance
 		self.__neighborhood = Neighborhood(rows, cols)
-		self.__neighborhood.showNeighborhood()
+		self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
 
 		user_input = ""
+
+		# only exits when the user types 'exit' or 'quit'
 		while user_input not in ['exit','quit']:
 			user_input = ""
 			user_input = input("Enter a command: ").lower()
 			print('\n')
 
+			# Just for giggles
 			if user_input in ['nuke', 'bomb']:
 				self.__neighborhood.nuke()
 				quit()
 
+			# Lists the players current inventory
 			if user_input in ['list', 'weapons']:
 				self.__player.listInventory()
 
+
+			# Sets the weapon to the inputted number
 			if user_input in ['0','1','2','3','4','5','6','7','8','9']:
 				self.__player.setCurrentWeapon(int(user_input))
-				self.__neighborhood.showNeighborhood()
+				self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
 				print("Current weapon set to %s - %s remaining" % (self.__player.getCurrentWeapon().getWeaponType(), self.__player.getCurrentWeapon().getUsesLeft()))
 
+			# displays the map for the use
 			if user_input == "map":
-				self.__neighborhood.showNeighborhood()
+				self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
 
+
+			# THIS IS EXTRA
+			#
+			# display user health and number of monsters remaining
+			#
+			# THIS IS EXTRA
 			if user_input in ["stats", "statistics"]:
 				self.__player.showPlayerStatistics()
 				self.__neighborhood.showNeighborhoodStatistics()
 
+
+			# when a user wishes to attack the current house
 			if user_input == "attack": ## attack
 
 				weapon = self.__player.getCurrentWeapon()
 
-				# if the house contains monsters
+				# if the house contains monsters then continue with attack
 				if self.__isHouseEmpty() == False:
 
-					# if the weapon has uses left
+					# if the weapon has uses left then continue attacking
 					if weapon.getUsesLeft() > 0:
-						
 
-						print("Attacking with a %s" % (self.__player.getCurrentWeapon().getWeaponType()))
+						print("Attacking with a %s\n" % (self.__player.getCurrentWeapon().getWeaponType()))
 
 						house = self.__neighborhood.getNeighborhood()[self.__current_row][self.__current_col].getNPCs()
-						for monster in house:
-							print("Attacking %s..." % (str(monster)[str(monster).index('.')+1:str(monster).index(' ')]))
 
 						# How much damage is going to be done
 						damage = self.__player.attackWithWeapon(self.__player.getCurrentWeapon())
@@ -115,6 +127,38 @@ class Zork(Observer):
 						weapon.decrementUsesLeft()
 					else:
 						print("You do not have any more %ss left!" % (str(weapon)[str(weapon).index(".")+1:str(weapon).index(" ")]))
+				else:
+					print("This house contains no monsters!")
+
+
+			# Controls the users movement throughout the game
+			if user_input == 'd': # right
+				if self.__current_col + 1 < self.__max_column:
+					self.__current_col += 1
+					self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+				else:
+					print("You cannot escape your own neighborhood!!!")
+
+			if user_input == 'a': # left
+				if self.__current_col - 1 >= 0:
+					self.__current_col -= 1
+					self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+				else:
+					print("You cannot escape your own neighborhood!!!")
+
+			if user_input == 'w': # up
+				if self.__current_row - 1 >= 0:
+					self.__current_row -= 1
+					self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+				else:
+					print("You cannot escape your own neighborhood!!!")
+
+			if user_input == 's': # down
+				if self.__current_row + 1 < self.__max_row:
+					self.__current_row += 1
+					self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
+				else:
+					print("You cannot escape your own neighborhood!!!")
 				
 				
 	def __isHouseEmpty(self):
@@ -122,19 +166,5 @@ class Zork(Observer):
 			return False
 		else:
 			return True
-
-
-
-	def promptForPlayStyle(self):
-		try:
-			print("\nWhich type of experience would you prefer?")
-			print("1) Automated")
-			print("2) Manual")
-			play_style = int(input(""))
-			if play_style not in [1,2]:
-				self.promptForPlayStyle()
-			return play_style
-		except Exception as e:
-			self.promptForPlayStyle()
 
 Zork(5,5)

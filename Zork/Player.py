@@ -32,10 +32,20 @@ class Player(Observer):
 		return self.__attack * weapon.getDamageMultiplier()
 
 	def __fillInventory(self):
-		weapon_types = [HersheyKiss(), SourStraw(), ChocolateBar(), NerdBomb()]
 		# clear inventory
 		# refill with new weapons
-		return [ weapon_types[randint(0,3)] for y in range(10) ] 
+		weapon_types = []
+		for x in range(10):
+			random = randint(0,3)
+			if random == 0:
+				weapon_types.append(HersheyKiss())
+			elif random == 1:
+				weapon_types.append(SourStraw())
+			elif random == 2:
+				weapon_types.append(ChocolateBar())
+			elif random == 3:
+				weapon_types.append(NerdBomb())
+		return weapon_types
 
 	def getCurrentWeapon(self):
 		"""

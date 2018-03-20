@@ -1,9 +1,9 @@
-from Observable import Observable
+from Observable import Observable # observed by a house
 from random import randint
 
 class NPC(Observable):
 	def __init__(self, name, HP, min_attack, max_attack):
-		super(NPC, self).__init__()
+		super(NPC, self).__init__() # pass itself to the Observable class
 		self._name = name
 		self._HP = HP
 		self.__min_attack = min_attack
@@ -31,17 +31,21 @@ class Zombie(NPC):
 
 	def takeDamage(self, damage, weapon):
 		# Check weapon type and modify damage when needed
-		if weapon == "Sour Straw":
-			damage *=2
-			self._HP -= damage
-			print("%s took %s damage due to a 2x multiplier from the %s" % (self._name, damage, weapon))
+		if self._HP > 0:
+			print("Attacking Zombie...")
+			if weapon == "Sour Straw":
+				damage *=2
+				self._HP -= damage
+				print("%s took %s damage due to a 2x multiplier from the %s" % (self._name, damage, weapon))
+			else:
+				self._HP -= damage
+				print("%s took %s damage" % (self._name, damage))
+			if self._HP <= 0: # removes any observers if the NPC dies
+				print("Zombie has died!")
+				self.update_observable(self) # updates the house on the death
+				self.clear_observers() # removes everything watching this character
 		else:
-			self._HP -= damage
-			print("%s took %s damage" % (self._name, damage))
-		if self._HP <= 0: # removes any observers if the NPC dies
-			print("Zombie has died!")
-			#self.update_observer(self) # updates the house on the death
-			#self.remove_observers() # removes everything watching this character
+			pass
 
 class Vampire(NPC):
 	def __init__(self):

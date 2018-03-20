@@ -1,25 +1,11 @@
 from House import House
-from Observer import Observer
-from Observable import Observable
+from Observer import Observer # observes the houses
+from Observable import Observable # observed by the Zork game
 from random import randint
 
 
 class Neighborhood(Observer, Observable):
-	"""
-	The class that defines what a neighborhood is, the houses it holds, while observing
-	all of the houses.
-	
-	Extends:
-		Observer
-	"""
 	def __init__(self, rows, cols):
-		"""
-		Initial constructor when a new neighborhood is created.
-		
-		Arguments:
-			rows {[int]} -- [number of rows in the neighborhood matrix]
-			cols {[int]} -- [number of columns in the neighborhood matrix]
-		"""
 		super(Neighborhood, self).__init__()
 		self.rows, self.cols = rows, cols
 
@@ -33,10 +19,10 @@ class Neighborhood(Observer, Observable):
 		self.__total_monsters, self.__total_persons  = self.__inHouseTotals()
 
 
-	def update_observer(self, delta_x, delta_y):
+	def update_observer(self, obj):
 		self.__num_monsters -= 1
 		self.__num_persons += 1
-		super().update_observable(obj)
+		super().update_observable(obj) # update the game
 
 
 	def showNeighborhoodStatistics(self):
@@ -61,27 +47,20 @@ class Neighborhood(Observer, Observable):
 		return self.__neighborhood[row][col].attackPlayer()
 
 	def attackHouse(self, row, col, damage, weapon):
-		self.__neighborhood[row][col].attackMonsters(damage, weapon)
+		if self.__neighborhood[row][col].getNumMonsters() > 0:
+			self.__neighborhood[row][col].attackMonsters(damage, weapon)
 
 
-	def showNeighborhood(self):
-		"""
-		Displays the neighborhood matrix in the console. The numbers at each
-		location represents how many monsters are alive in each house.
-		"""
+	def showNeighborhood(self, current_row, current_col):
 		for row in range(0, self.rows):
 			for col in range(0,self.cols):
-				if(type(self.__neighborhood[row][col]) == House):
-					print(self.__neighborhood[row][col].getNumMonsters(), end=" ")
-					#print('*', end=" ")
+				if(row == current_row):
+					if (col == current_col):
+						print("\x1b[37m\u2588", end=" ")
+					else:
+						print(self.__neighborhood[row][col].getNumMonsters(), end=" ")
 				else:
-				#elif (self.__neighborhood[row][col].getNumMonsters() > 0):
-					print("\x1b[37m\u2588", end=" ")
-					
-					
-				#else:
-				#	print("\x1b[37m\u2588", end=" ")
-				#print("\x1b[37m\u2588", end=" ")
+					print(self.__neighborhood[row][col].getNumMonsters(), end=" ")
 			print('\n\n')
 
 	def nuke(self):
