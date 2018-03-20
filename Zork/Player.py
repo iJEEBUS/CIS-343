@@ -1,7 +1,8 @@
 from Weapon import HersheyKiss, SourStraw, ChocolateBar, NerdBomb
 from random import randint
+from Observer import Observer
 
-class Player(object):
+class Player(Observer):
 	"""
 	Player class that will create a new player for the game called Zork.
 	"""

@@ -1,6 +1,7 @@
 from Observer import Observer
 from Player import Player
 from Neighborhood import Neighborhood
+
 class Zork(Observer):
 	def __init__(self, max_columns, max_rows):
 		self.__max_column = max_columns
@@ -19,14 +20,13 @@ class Zork(Observer):
 			print("The survivors provide you with more candy, which boosts your health: +10 HP")
 			self.__player.takeDamage(-10) # negatively taking damage == adding health
 
-
 	def promptForRows(self):
 		try:
 			rows = int(input("How many rows of houses are in your neighborhood? "))
 			return rows
 		except Exception as e:
 			self.promptForRows()
-		
+
 
 	def promptForCols(self):
 		try:
@@ -93,33 +93,28 @@ class Zork(Observer):
 				self.__neighborhood.showNeighborhoodStatistics()
 
 			if user_input == "attack": ## attack
+
+				weapon = self.__player.getCurrentWeapon()
+
+				# if the house contains monsters
 				if self.__isHouseEmpty() == False:
-					print("Attacking with a %s" % (self.__player.getCurrentWeapon().getWeaponType()))
-					house = self.__neighborhood.getNeighborhood()[self.__current_row][self.__current_col].getNPCs()
-					for monster in house:
-						print("Attacking %s...", (monster))
 
-					self.__player.attackWithWeapon(self.__player.getCurrentWeapon())
-					self.__player.getCurrentWeapon().decrementUsesLeft()
+					# if the weapon has uses left
+					if weapon.getUsesLeft() > 0:
+						
 
-			if user_input == 'w': # up
-				pass
+						print("Attacking with a %s" % (self.__player.getCurrentWeapon().getWeaponType()))
 
-			if user_input == 's': # down
-				pass
-					
+						house = self.__neighborhood.getNeighborhood()[self.__current_row][self.__current_col].getNPCs()
+						for monster in house:
+							print("Attacking %s..." % (str(monster)[str(monster).index('.')+1:str(monster).index(' ')]))
 
-
-			if user_input == 'a': # left
-				pass
-					
-
-
-			if user_input == 'd': # right
-				pass
-					
-			else:
-				pass
+						# How much damage is going to be done
+						damage = self.__player.attackWithWeapon(self.__player.getCurrentWeapon())
+						self.__neighborhood.attackHouse(self.__current_row, self.__current_col, damage, weapon)
+						weapon.decrementUsesLeft()
+					else:
+						print("You do not have any more %ss left!" % (str(weapon)[str(weapon).index(".")+1:str(weapon).index(" ")]))
 				
 				
 	def __isHouseEmpty(self):
@@ -127,6 +122,7 @@ class Zork(Observer):
 			return False
 		else:
 			return True
+
 
 
 	def promptForPlayStyle(self):

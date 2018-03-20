@@ -4,8 +4,8 @@ from random import randint
 class NPC(Observable):
 	def __init__(self, name, HP, min_attack, max_attack):
 		super(NPC, self).__init__()
-		self.__name = name
-		self.__HP = HP
+		self._name = name
+		self._HP = HP
 		self.__min_attack = min_attack
 		self.__max_attack = max_attack
 
@@ -15,10 +15,6 @@ class NPC(Observable):
 			return randint(self.__min_attack, self.__max_attack)
 		def getName(self):
 			return self.__name
-		def __checkIfAlive(self):
-			if self.__HP <= 0:
-				self.update_observable() # updates the house on the death
-				self.remove_observers() # removes everything watching this character
 
 class Person(NPC):
 	def __init__(self):
@@ -37,12 +33,15 @@ class Zombie(NPC):
 		# Check weapon type and modify damage when needed
 		if weapon == "Sour Straw":
 			damage *=2
-			self.__HP -= damage
-			print("%s took %s damage due to a 2x multiplier from the %s" % (self.__name, damage, weapon))
+			self._HP -= damage
+			print("%s took %s damage due to a 2x multiplier from the %s" % (self._name, damage, weapon))
 		else:
-			self.__HP -= damage
-			print("%s took %s damage" % (self.__name, damage))
-		self.__checkIfAlive() # removes any observers if the NPC dies
+			self._HP -= damage
+			print("%s took %s damage" % (self._name, damage))
+		if self._HP <= 0: # removes any observers if the NPC dies
+			print("Zombie has died!")
+			#self.update_observer(self) # updates the house on the death
+			#self.remove_observers() # removes everything watching this character
 
 class Vampire(NPC):
 	def __init__(self):
@@ -50,11 +49,11 @@ class Vampire(NPC):
 		
 	def takeDamage(self, damage, weapon):
 		if weapon != "Chocolate Bar":
-			self.__HP -= damage
-			print("%s took %s damage" % (self.__name, damage))
-			self.__checkIfAlive()
+			self._HP -= damage
+			print("%s took %s damage" % (self._name, damage))
+			#self.__checkIfAlive()
 		else:
-			print("The %s seems to actually enjoy the %s -_-" % (self.__name, weapon))
+			print("The %s seems to actually enjoy the %s -_-" % (self._name, weapon))
 
 class Ghoul(NPC):
 	def __init__(self):
@@ -63,12 +62,12 @@ class Ghoul(NPC):
 	def takeDamage(self, damage, weapon):
 		if weapon == "Nerd Bomb":
 			damage *= 5
-			self.__HP -= damage
-			print("%s took %s damage due to a 5x multiplier from the %s" % (self.__name, damage, weapon))
+			self._HP -= damage
+			print("%s took %s damage due to a 5x multiplier from the %s" % (self._name, damage, weapon))
 		else:
-			self.__HP -= damage
-			print("%s took %s damage" % (self.__name, damage))
-		self.__checkIfAlive()
+			self._HP -= damage
+			print("%s took %s damage" % (self._name, damage))
+		#self.__checkIfAlive()
 
 class Werewolf(NPC):
 	def __init__(self):
@@ -76,13 +75,13 @@ class Werewolf(NPC):
 
 	def takeDamage(self, damage, weapon):
 	 	if weapon == 'Chocolate Bar':
-	 		print("The %s seems to actually enjoy the %s -_-" % (self.__name, weapon))
+	 		print("The %s seems to actually enjoy the %s -_-" % (self._name, weapon))
 	 	if weapon == 'Sour Straw':
-	 		print("The %s seems to actually enjoy the %s -_-" % (self.__name, weapon))
+	 		print("The %s seems to actually enjoy the %s -_-" % (self._name, weapon))
 	 	else:
-	 		self.__HP -= damage
-	 		print("%s took %s damage" % (self.__name, damage))
-	 		self.__checkIfAlive()
+	 		self._HP -= damage
+	 		print("%s took %s damage" % (self._name, damage))
+	 		#self.__checkIfAlive()
 		
 		
 		

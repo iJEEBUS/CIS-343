@@ -27,8 +27,9 @@ class House(Observer, Observable):
 	# Go through and create random NPCs for the house.
 	# Add the house as an observer of each one added.
 	def __create_NPCs(self, num_NPCs):
+
 		for x in range(0, num_NPCs):
-			NPC_type = randint(0,4)
+			NPC_type = 1#randint(0,4)
 
 			if NPC_type == 0: # Person
 				person = Person()

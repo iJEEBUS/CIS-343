@@ -34,8 +34,8 @@ class SourStraw(Weapon):
 
 class ChocolateBar(Weapon):
 	def __init__(self):
-		Weapon.__init__(self, "Chocolate Bar",2, 2.4, 4)
+		Weapon.__init__(self, "Chocolate Bar", 2, 2.4, 4)
 
 class NerdBomb(Weapon):
 	def __init__(self):
-		Weapon.__init__(self, "Nerd Bomb" ,3.5, 5, 1)
+		Weapon.__init__(self, "Nerd Bomb" , 3.5, 5, 1)
