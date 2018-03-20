@@ -46,28 +46,23 @@ class Zork(Observer):
 
 	def printDirections(self):
 		print("\n\n\n\n========================================================= zorKK! =========================================================")
-		print("It seemed like a normal Halloween Eve.")
-		print("You bought a lot of candy, ate a lot of candy, and went to bed early.")
-		print("You had a lot trick-or-treating to do the next day.\n")
-		print("Unfortunately, when you woke up you discovered that the world was not how you left it.")
-		print("Batches of bad candy had transformed your friends and neighbors into all sorts of crazy monsters.")
-		print("Somehow you missed the tainted candy; it is therefore up to you to save your neighborhood and turn everyone back to normal.")
-		print("\n\n========================================================= Manual =========================================================")
-		print("\u2588 = player location")
-		print("#'s -> how many monsters are in each house")
-		print("W -> up")
-		print("S -> down")
-		print("A -> left")
-		print("D -> right")
-		print("list -> show all weapons")
-		print("map -> show the map of the neighborhood")
-		print("stats -> display player statistics")
-		print("\'exit\' or \'quit\' -> exit game\n\n\n\n")
+		print("#m = how many monsters are in a house")
+		print("#p = how many persons are in a house\n")
+		print("(attack) attack the current house")
+		print("(w) up")
+		print("(s) down")
+		print("(a) left")
+		print("(d) right")
+		print("(list) show all weapons in inventory")
+		print("(0-9) set current weapon to specified index")
+		print("(nuke) just end it all")
+		print("(exit)\(quit) exit the game\n\n")
 
 	def __playGame(self, max_columns, max_rows):
 		print("\x1b[37m")
-		print("\nzorKK")
-		print('\n')
+		#print("\nzorKK")
+		#print('\n')
+		self.printDirections()
 		rows = max_rows#self.promptForRows()
 		cols = max_columns#self.promptForCols()
 		print("\n")
@@ -80,6 +75,7 @@ class Zork(Observer):
 
 		# only exits when the user types 'exit' or 'quit'
 		while user_input not in ['exit','quit'] :
+			print('\n')
 			self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
 			print('\n')
 
@@ -103,7 +99,7 @@ class Zork(Observer):
 			if user_input in ['0','1','2','3','4','5','6','7','8','9']:
 				self.__player.setCurrentWeapon(int(user_input))
 				self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
-				print("Current weapon set to %s - %s remaining" % (self.__player.getCurrentWeapon().getWeaponType(), self.__player.getCurrentWeapon().getUsesLeft()))
+				print("Current weapon set to %s - %s remaining\n" % (self.__player.getCurrentWeapon().getWeaponType(), self.__player.getCurrentWeapon().getUsesLeft()))
 
 			# displays the map for the use
 			#if user_input == "map":
@@ -132,17 +128,22 @@ class Zork(Observer):
 					# if the weapon has uses left then continue attacking
 					if weapon.getUsesLeft() > 0:
 
-						print("Attacking with a %s\n" % (self.__player.getCurrentWeapon().getWeaponType()))
+						print("Attacking with a %s - %s now remaining\n" % (self.__player.getCurrentWeapon().getWeaponType(), self.__player.getCurrentWeapon().getUsesLeft()-1))
 
 						house = self.__neighborhood.getNeighborhood()[self.__current_row][self.__current_col].getNPCs()
 
 						# How much damage is going to be done
 						damage = self.__player.attackWithWeapon(self.__player.getCurrentWeapon())
+						print("You attack all of the monsters in the house....")
 						self.__neighborhood.attackHouse(self.__current_row, self.__current_col, damage, weapon)
+						print('\n')
 
 						# enemies attack right after you attack
+						print("The monsters retaliate causing %s damage")
 						monster_attack = self.__neighborhood.getNeighborhood()[self.__current_row][self.__current_col].attackPlayer()
+						print("Total damage: %s" % (monster_attack))
 						self.__player.takeDamage(monster_attack)
+
 
 						# if the players health decreases to 0 
 						# then display ending message and ask user 
@@ -153,13 +154,12 @@ class Zork(Observer):
 
 						# checks if there are any more monsters alive
 						if self.__neighborhood.getTotalMonsters() <= 0:
-							print("You have won the game! Congrats!")
+							print("========================= Victory =========================")
+							print("\nYou have won the game and saved your loved ones!!")
 							self.playAgain()
-
-
-
 					else:
-						print("You do not have any more %ss left!" % (str(weapon)[str(weapon).index(".")+1:str(weapon).index(" ")]))
+						print("You do not have any more %ss left! Replacing with another weapon.\n" % (str(weapon)[str(weapon).index(".")+1:str(weapon).index(" ")]))
+						self.__player.changeEmptyWeapons()
 				else:
 					print("This house contains no monsters!")
 
@@ -191,11 +191,6 @@ class Zork(Observer):
 					#self.__neighborhood.showNeighborhood(self.__current_row, self.__current_col)
 				else:
 					print("You cannot escape your own neighborhood!! Turn around and save your friends!\n")
-
-			# see how many monsters are alive on the board
-			# if it is zero then display win screen and exit
-			#if self.__neighborhood.getNumMonsters() == 0:
-			#	print("You have cleared the entire neighborhood!")
 				
 				
 	def __containsMonsters(self):

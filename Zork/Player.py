@@ -42,11 +42,30 @@ class Player(Observer):
 				weapon_types.append(NerdBomb())
 		return weapon_types
 
+	def pickRandomWeapon(self):
+		random = randint(0,3)
+		if random == 0:
+			return HersheyKiss()
+		elif random == 1:
+			return SourStraw()
+		elif random == 2:
+			return ChocolateBar()
+		elif random == 3:
+			return NerdBomb()
+
 	def getCurrentWeapon(self):
 		return self.__current_weapon
 
 	def setCurrentWeapon(self, index):
 		self.__current_weapon = self.__inventory[index]
+
+	def changeEmptyWeapons(self):
+		count = 0
+		for weapon in self.__inventory:
+			if weapon.getUsesLeft() == 0:
+				weapon = self.pickRandomWeapon()
+				self.__inventory[count] = weapon 
+			count += 1
 
 	def listInventory(self):
 		counter = 0

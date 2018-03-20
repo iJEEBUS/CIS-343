@@ -89,6 +89,13 @@ class Neighborhood(Observer, Observable):
 		print("\nYou see a great flash as an intense heat incinerates every living, and un-living, organism in the area.")	
 		print("What used to be your home has transformed into an urban cemetery it impossible to search for survivors.")
 		print("Great job...you played yourself.\n")
+
+		for x in range(5):
+			print("...")
+			time.sleep(1)
+		print("...welcome to your new neighborhood!\n")
+		time.sleep(1.5)
+
 		for row in range(0, self.rows):
 			for col in range(0,self.cols):
 					print("\x1b[33m\u2588 0m / 0p \x1b[33m\u2588", end=" ")

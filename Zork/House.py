@@ -32,7 +32,7 @@ class House(Observer, Observable):
 	def __create_NPCs(self, num_NPCs):
 
 		for x in range(0, num_NPCs):
-			NPC_type = 1#randint(0,4)
+			NPC_type = randint(0,4)
 
 			if NPC_type == 0: # Person
 				person = Person()
