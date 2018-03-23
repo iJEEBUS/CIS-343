@@ -4,8 +4,22 @@ from Observable import Observable # observed by the Zork game
 from random import randint
 import time
 
+"""
+This is the Neighborhood class that the player will be able to navigate and interact with.
+The Neighborhood observes all of the Houses that it contains.
+The Neighborhood is also observed by the Zork class, which is an instance of the game.
 
+@author Ronald Rounsifer
+@version 3/23/2018
+"""
 class Neighborhood(Observer, Observable):
+
+	"""
+	Initial constructor for the House class.
+
+	@param rows - int - number of rows that will make up the neighborhood
+	@param cols - int - number of columns that will make up the neighborhood
+	"""
 	def __init__(self, rows, cols):
 		super(Neighborhood, self).__init__()
 		self.rows, self.cols = rows, cols
@@ -19,17 +33,31 @@ class Neighborhood(Observer, Observable):
 				self.__neighborhood[row][col].add_observer(self)
 		self.__total_monsters, self.__total_persons  = self.__inHouseTotals()
 
+	"""
+	Decrements the total number of monsters in the Neighborhood.
+	Increments the total number of people in the Neighborhood.
 
+	@param obj - Zork - the instance of the game
+	"""
 	def update_observer(self, obj):
 		self.__total_monsters -= 1
 		self.__total_persons += 1
 		super().update_observable(obj) # update the game
 
 
+	"""
+	Displays how many monsters are left in the Neighborhood instance
+	"""
 	def showNeighborhoodStatistics(self):
 		print("%s monsters remain" % getNumMonsters())
 
+	"""
+	Counts and returns the total amount of monsters and total amount of people that are currently
+	in the Neighborhood.
 
+	@returns total_monsters - int - total monsters alive in the neighborhood
+	@returns total_persons - int - total people alive in the neighborhood
+	"""
 	def __inHouseTotals(self):
 		total_monsters = 0
 		total_persons = 0
@@ -43,16 +71,33 @@ class Neighborhood(Observer, Observable):
 		# returns both the total number of  monsters and people in the houses
 		return total_monsters, total_persons
 
+	"""
+	Calculates and returns the total damage done by the monsters in the players current location
 
+	@returns damage - int - damage the monsters do to the player
+	"""
 	def monstersAttack(self):
 		damage = self.__neighborhood.attackPlayer(self.__current_row, self.__current_col)
 		self.__player.takeDamage(damage)
 		return damage
 
+	"""
+	Attacks a specified house that is located in the Neighborhood.
+
+	@param row - int - the row that the house is in
+	@param col - int - the column that the house is in
+	@param damage - int - the player's base attack damage
+	@param weapon - str - the weapon the player is attacking with
+	"""
 	def attackHouse(self, row, col, damage, weapon):
 		self.__neighborhood[row][col].attackMonsters(damage, weapon)
 
+	"""
+	Displays the neighborhood to the console.
 
+	@param current_row - int - the current row that the player is in
+	@param current_col - int - the current column that the player is in 
+	"""
 	def showNeighborhood(self, current_row, current_col):
 		for row in range(0, self.rows):
 			for col in range(0,self.cols):
@@ -73,6 +118,9 @@ class Neighborhood(Observer, Observable):
 				
 			print('\x1b[37m\n\n')
 
+	"""
+	Call a nuclear strike on the only place you have called home.
+	"""
 	def nuke(self):
 		print("\x1b[33mScrambling around the house you find what seems to be a detonator.")
 		print("Even though the outcome is uncertain, you flip the switch and attempt to escape your neighborhood by foot.")
@@ -101,15 +149,34 @@ class Neighborhood(Observer, Observable):
 					print("\x1b[33m\u2588 0m / 0p \x1b[33m\u2588", end=" ")
 			print('\n')
 
+	"""
+	Retrieves the number of monsters in a specific house.
+
+	@param row - int - row that contains the house
+	@param col - int - column that contains the house
+	@returns int - number of monsters in the house
+	"""
 	def getNumMonstersSpecificHouse(self, row, col):
 		return self.__neighborhood[row][col].getNumMonsters()
 
+	"""
+	Retrieves the total number of monsters in the Neighborhood
 
+	@returns int - total number of monsters
+	"""
 	def getTotalMonsters(self):
 		return self.__total_monsters
 
+	"""
+	Retrieves the total number of people alive in the neighborhood
+
+	@returns int - total number of people alive
+	"""
 	def getTotalPersons(self):
 		return self.__total_persons
 
+	"""
+	Returns the instance of the neighborhood
+	"""
 	def getNeighborhood(self):
 		return self.__neighborhood

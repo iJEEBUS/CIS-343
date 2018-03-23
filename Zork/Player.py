@@ -2,30 +2,52 @@ from Weapon import HersheyKiss, SourStraw, ChocolateBar, NerdBomb
 from random import randint
 from Observer import Observer
 
+"""
+This is the Player class that will handle the creation of a player instance
+for the game of Zork.
+
+@author Ronald Rounsifer
+@version 3/23/2018
+"""
 class Player(Observer):
 	"""
-	Player class that will create a new player for the game called Zork.
+	Initial constructor that is called when a player is created.
+	Sets the HP, attack points,
+	inventory, and current weapon for every new instance.
 	"""
 	def __init__(self):
-		"""
-		Initial constructor the the player class. Sets the HP, attack points,
-		inventory, and current weapon for every new instance.
-		"""
 		self.__HP = 1000 #randint(100,125)
 		self.__attack = randint(10, 20)
 		self.__inventory = self.__fillInventory()
 		self.__current_weapon = self.__inventory[0]
 
+	"""
+	Applies damage done to the player to their HP.
+
+	@param damage - int - amount to subtract from the players health
+	"""
 	def takeDamage(self, damage):
 		self.__HP -= damage
 
+	"""
+	Retrieves the players current health
+
+	@returns int - the players health
+	"""
 	def getHP(self):
 		return self.__HP
 
+	"""
+	Returns the calculated attack value
+
+	@param str - weapon that the player attacks with
+	"""
 	def attackWithWeapon(self, weapon):
-		# returns the calculated attack value
 		return self.__attack * weapon.useWeapon()
 
+	"""
+	Private method that fills the users inventory with random weapons.
+	"""
 	def __fillInventory(self):
 		# clear inventory
 		# refill with new weapons
@@ -42,6 +64,12 @@ class Player(Observer):
 				weapon_types.append(NerdBomb())
 		return weapon_types
 
+	"""
+	Picks a random weapon that is to be placed inside of the empty spots of the players
+	inventory
+
+	@returns Weapon - weapon to be placed in the inventory
+	"""
 	def pickRandomWeapon(self):
 		random = randint(0,3)
 		if random == 0:
@@ -53,12 +81,26 @@ class Player(Observer):
 		elif random == 3:
 			return NerdBomb()
 
+	"""
+	Returns the weapon currently held by the player.
+
+	@returns Weapon - the players current weapon
+	"""
 	def getCurrentWeapon(self):
 		return self.__current_weapon
 
+	"""
+	Sets the current weapon to the specified index.
+
+	@param index - int - the index of the weapon to change to
+	"""
 	def setCurrentWeapon(self, index):
 		self.__current_weapon = self.__inventory[index]
 
+	"""
+	Loops through and exchanges all of the empty weapon spaces in the inventory
+	with new, random weapons.
+	"""
 	def changeEmptyWeapons(self):
 		count = 0
 		for weapon in self.__inventory:
@@ -67,6 +109,9 @@ class Player(Observer):
 				self.__inventory[count] = weapon 
 			count += 1
 
+	"""
+	Lists the players inventory to the console
+	"""
 	def listInventory(self):
 		counter = 0
 		for weapon in self.__inventory:
@@ -74,8 +119,16 @@ class Player(Observer):
 			counter += 1
 		print("\n")
 
+	"""
+	Returns the players inventory.
+
+	@returns list - players current inventory
+	"""
 	def getInventory(self):
 		return self.__inventory
 
+	"""
+	Prins the players current health to the console.
+	"""
 	def showPlayerStatistics(self):
 		print("HP: %s" % (self.__HP))
