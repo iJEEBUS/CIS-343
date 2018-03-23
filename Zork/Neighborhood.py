@@ -3,7 +3,6 @@ from Observer import Observer # observes the houses
 from Observable import Observable # observed by the Zork game
 from random import randint
 import time
-
 """
 This is the Neighborhood class that the player will be able to navigate and interact with.
 The Neighborhood observes all of the Houses that it contains.

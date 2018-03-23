@@ -1,6 +1,5 @@
 from Observable import Observable # observed by a house
 from random import randint
-
 """
 This is the NPC class that will handle the creation of both monsters and humans 
 as they are instantiated throughout the game. 
@@ -205,7 +204,7 @@ class Ghoul(NPC):
 				print("A ghould has died!")
 				self.update_observable(self)
 				self.clear_observers()
-				
+
 """
 The Werewolf NPC that is to be used in the Zork game.
 Is a sublcass of the NPC class.

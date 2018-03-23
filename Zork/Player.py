@@ -1,7 +1,5 @@
 from Weapon import HersheyKiss, SourStraw, ChocolateBar, NerdBomb
 from random import randint
-from Observer import Observer
-
 """
 This is the Player class that will handle the creation of a player instance
 for the game of Zork.
@@ -9,7 +7,7 @@ for the game of Zork.
 @author Ronald Rounsifer
 @version 3/23/2018
 """
-class Player(Observer):
+class Player:
 	"""
 	Initial constructor that is called when a player is created.
 	Sets the HP, attack points,

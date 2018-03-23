@@ -1,7 +1,6 @@
 from Observer import Observer
 from Player import Player
 from Neighborhood import Neighborhood
-
 """
 This is the actual instance of the Zork game.
 This class Oberves the Neighborhood class that it instaniates.
@@ -38,7 +37,7 @@ class Zork(Observer):
 		else:
 			print("LOL loser")
 			quit()
-			
+
 	"""
 	Helper method that only prints out the directions to the console.
 	"""

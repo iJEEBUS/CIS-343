@@ -1,5 +1,4 @@
 from random import uniform
-
 """
 This is the Weapon class that will handle the creation of weapons as they are
 instantiated throughout the game. 

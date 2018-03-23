@@ -2,7 +2,6 @@ from Observer import Observer # observes the monsters
 from Observable import Observable # observed by the neighborhood
 from NPC import Person, Zombie, Vampire, Ghoul, Werewolf
 from random import randint
-
 """
 This is the House class that will contain the monsters that the house observes.
 This class should be used in conjunction with other houses in order to create 
