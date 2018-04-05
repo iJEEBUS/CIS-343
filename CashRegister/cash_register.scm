@@ -1,0 +1,32 @@
+(define tax 0.065)
+(define runningTotal 0)
+(define currentItem 0)
+(define input 0)
+(define total 0)
+(define total_taxes 0)
+
+(define (pos runningTotal condition)(
+    (+ runningTotal condition)
+    (if(eq? condition -1)
+        (begin
+            (display "\n")
+            (display "=== OUTPUTS ===")
+            (display "\n")
+            (display runningTotal)
+            (display "\n")
+            (display tax)
+            (display "\n")
+            (let ((total_taxes(* runningTotal tax)))
+                (let ((total(+ runningTotal total_taxes)))
+                    (display total)))
+            (display "\n")
+            (display "\n")
+            (exit)
+        )
+        (begin
+            (let ((input(read)))((pos (+ condition runningTotal) input)))
+            
+        )    
+    )
+    )
+)
