@@ -4,6 +4,9 @@
 (define input 0)
 (define total 0)
 (define total_taxes 0)
+(define (roundOff z n)
+  (let ((power (expt 10 n)))
+    (/ (round (* power z)) power)))
 
 (define (pos runningTotal condition)(
 
@@ -11,14 +14,14 @@
     (if(eq? condition -1)
         (begin
             (display "\n\nSubtotal: $")
-            (display runningTotal)
+            (display (roundOff runningTotal 2))
             (display "\nTax: $")
             (let ((total_taxes(* runningTotal tax)))
-                (display total_taxes))
+                (display (roundOff total_taxes 2) ))
             (display "\nTotal: $")
             (let ((total_taxes(* runningTotal tax)))
                 (let ((total(+ runningTotal total_taxes)))
-                    (display total)))
+                    (display (roundOff total 2))))
             (display "\n\n")
             (exit)
         )
