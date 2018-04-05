@@ -6,26 +6,33 @@
 (define total_taxes 0)
 
 (define (pos runningTotal condition)(
+
     (+ runningTotal condition)
     (if(eq? condition -1)
         (begin
-            (display "\n")
-            (display "=== OUTPUTS ===")
-            (display "\n")
+            (display "\n\nSubtotal: $")
             (display runningTotal)
-            (display "\n")
-            (display tax)
-            (display "\n")
+            (display "\nTax: $")
+            (let ((total_taxes(* runningTotal tax)))
+                (display total_taxes))
+            (display "\nTotal: $")
             (let ((total_taxes(* runningTotal tax)))
                 (let ((total(+ runningTotal total_taxes)))
                     (display total)))
-            (display "\n")
-            (display "\n")
+            (display "\n\n")
             (exit)
         )
         (begin
-            (let ((input(read)))((pos (+ condition runningTotal) input)))
-            
+            (if(eq? condition 0)
+                (begin
+                    (let ((greeting(display "\nScheme Point-of-Sale\nStart transaction (exit with -1)\n\nEnter a value: $")))
+                        (+ greeting (let ((input(read)))((pos (+ condition runningTotal) input)))))
+                )
+                (begin
+                    (display "Enter a value: $")
+                    (let ((input(read)))((pos (+ condition runningTotal) input)))
+                )
+                )
         )    
     )
     )
