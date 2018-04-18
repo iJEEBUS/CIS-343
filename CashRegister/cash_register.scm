@@ -4,7 +4,7 @@
 ; with a total amount do. 
 ; At the end of execution the program terminates gracefully
 ;
-; Author(s): Ronald Rounsifer
+; Author(s): Ronald Rounsifer, Sean Thomas
 ; Date: 04.17.2018
 
 ; definition of functions 
